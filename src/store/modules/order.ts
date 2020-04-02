@@ -2,15 +2,15 @@ import { Module } from 'vuex/types'
 import orderService from '@/api/orders.api'
 
 interface OrderItem{
-    item_id: number,
-    coffee_id: number,
-    coffee_name: String,
-    weight: String,
-    grams: number,
-    bag_id: number
-    ground_level: String,
-    ground_level_id: number,
-    amount: number,
+    item_id: number;
+    coffee_id: number;
+    coffee_name: string;
+    weight: string;
+    grams: number;
+    bag_id: number;
+    ground_level: string;
+    ground_level_id: number;
+    amount: number;
 }
 
 /*interface Order{
@@ -32,8 +32,8 @@ interface OrderItem{
 }*/
 
 interface OrderState{
-  items: Array<OrderItem>,
-  delivery_id: number,
+  items: Array<OrderItem>;
+  delivery_id: number;
 }
 
 const state: OrderState = {
@@ -65,7 +65,7 @@ const module: Module<OrderState, {}> = {
       })
     },
     deleteItemFromOrder: (state, item_id) => {
-      let index = state.items.map (x => {
+      const index = state.items.map (x => {
         return x.item_id;
       }).indexOf(item_id);
       state.items.splice(index, 1);
@@ -100,7 +100,7 @@ const module: Module<OrderState, {}> = {
       commit('setDeliveryId', delivery_id)
     },
     postOrder: ({state, commit}) => {
-      let orderItems = []
+      const orderItems = [] as any
       state.items.map(item => {
         orderItems.push([item.coffee_id, item.bag_id, item.ground_level_id, item.amount])
       })
