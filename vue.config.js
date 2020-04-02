@@ -8,6 +8,6 @@ module.exports = {
   // publicPath: process.env.NODE_ENV === 'production'
   // ? '/'
   // : 'http://localhost:3000',
-  outputDir: path.resolve(__dirname, '../server/public'),
+  // outputDir: path.resolve(__dirname, '../server/public'),
 
 }
