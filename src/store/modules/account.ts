@@ -2,7 +2,7 @@ import { Module } from 'vuex/types'
 import customerService from '@/api/customer.api'
 
 interface AccountState {
-    loggedIn: boolean
+    loggedIn: boolean;
 }
 
 const state: AccountState = {

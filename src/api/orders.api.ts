@@ -24,7 +24,7 @@ class OrderService {
     private END_POINT = '/order'
 
     async postOrder(items: [], delivery_id: number){
-        let obj = {
+        const obj = {
             info: "Info",
             delivery_date: '2020-08-09',
             production_date: '2020-08-09',
@@ -34,7 +34,7 @@ class OrderService {
             ref_id: 1,
             list: items
         }
-        let jsonObj = JSON.stringify(obj)
+        const jsonObj = JSON.stringify(obj)
         return httpClient.post(this.END_POINT, jsonObj)
         .then(function (response) {
             console.log("Post order request status: ",response.status)

@@ -4,12 +4,12 @@ class CustomerService {
 
     private END_POINT = '/customer'
 
-    async login(username: String, password: String){
-        let loginInfo = {
+    async login(username: string, password: string){
+        const loginInfo = {
             email: username,
             password: password
         }
-        let jsonLoginInfo = JSON.stringify(loginInfo)
+        const jsonLoginInfo = JSON.stringify(loginInfo)
         return httpClient.post(this.END_POINT+'/login', jsonLoginInfo)
         .then(function (response){
             console.log(response)
