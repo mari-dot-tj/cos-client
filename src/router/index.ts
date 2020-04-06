@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import OrderOverview from '../views/OrderOverview.vue'
 import NewOrder from '../views/NewOrder.vue'
 import MyProfile from '../views/MyProfile.vue'
+import LoginForm from '../views/LoginForm.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ const routes = [
     path: '/my-profile',
     name: 'MyProfile',
     component: MyProfile
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: LoginForm
   }
 ]
 

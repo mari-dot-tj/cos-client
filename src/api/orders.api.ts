@@ -34,7 +34,7 @@ class OrderService {
             ref_id: 1,
             list: items
         }
-        var jsonObj = JSON.stringify(obj)
+        let jsonObj = JSON.stringify(obj)
         return httpClient.post(this.END_POINT, jsonObj)
         .then(function (response) {
             console.log("Post order request status: ",response.status)
