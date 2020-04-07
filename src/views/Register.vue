@@ -202,6 +202,7 @@
 import { mapActions } from 'vuex'
 
 export default {
+    name: 'Register',
     data: () => ({
         name: '',
         address: '',

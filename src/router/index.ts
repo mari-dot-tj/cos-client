@@ -3,8 +3,8 @@ import VueRouter from 'vue-router'
 import OrderOverview from '../views/OrderOverview.vue'
 import NewOrder from '../views/NewOrder.vue'
 import MyProfile from '../views/MyProfile.vue'
-import LoginForm from '../views/LoginForm.vue'
-import RegisterForm from '../views/RegisterForm.vue'
+import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
 
 Vue.use(VueRouter)
 
@@ -27,12 +27,12 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: LoginForm
+    component: Login
   },
   {
     path: '/register-new-user',
     name: 'registerNewUser',
-    component: RegisterForm
+    component: Register
   }
 ]
 

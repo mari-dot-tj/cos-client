@@ -128,7 +128,7 @@ import Vue from 'vue'
 import { mapState, mapActions } from 'vuex'
 
 export default Vue.extend({
-    name: 'LoginForm',
+    name: 'Login',
     data: () => ({
         username: '',
         password: '',
