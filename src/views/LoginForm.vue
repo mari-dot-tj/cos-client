@@ -42,7 +42,7 @@
                     large 
                     class="login-btn mx-auto"
                     color="primary"
-                    @click="test"
+                    @click="loginIfValid"
                     v-on="on"
                     >
                         Login
@@ -50,14 +50,19 @@
                 </v-card-actions>
                 <br>
                 <v-card-actions>
-                    <v-btn text color="primary">Forgot password?</v-btn>
+                    <v-btn 
+                    text 
+                    color="primary">Forgot password?</v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn text color="primary">New customer?</v-btn>
+                    <v-btn 
+                    text
+                    color="primary"
+                    @click="$router.push('/register-new-user')">New customer?</v-btn>
                 </v-card-actions>
             </v-card>
         </v-container>
     </template>
-    <v-card v-if="failedLogin">
+    <v-card v-if="failedLoginDialog">
         <v-card-title
           color="primary"
         >
@@ -75,7 +80,31 @@
           <v-btn
             outlined
             color="primary"
-            @click="dialog = false; failedLogin=false"
+            @click="dialog = false; failedLoginDialog=false"
+          >
+            OK
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+      <v-card v-if="notValidFormDialog">
+        <v-card-title
+          color="primary"
+        >
+          Login not valid
+        </v-card-title>
+
+        <v-card-text>
+          Check if you have filled out the required fields correctly and try again.
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            outlined
+            color="primary"
+            @click="dialog = false; notValidFormDialog=false"
           >
             OK
           </v-btn>
@@ -112,24 +141,22 @@ export default Vue.extend({
         ],
         showPassword: false, //boolean for toggling the show password icon
         dialog: false,
-        failedLogin: false
+        failedLoginDialog: false,
+        notValidFormDialog: false
     }),
     methods: {
         ...mapActions('account', ['login']),
-        checkIfValid(){
+        loginIfValid(){
             if(this.$refs.form.validate()){
-                return true
-            }else return false
-        },
-        test(){
-            if(this.checkIfValid()){
                 this.login({username: this.username, password: this.password})
                 .then(res => {
                     if(res == 200){
-                        this.failedLogin = false
+                        this.failedLoginDialog = false
                         this.$router.push('/order-overview')
-                    }else this.failedLogin=true
+                    }else this.failedLoginDialog=true
                 })
+            }else{
+                this.notValidFormDialog=true
             }
         }
     },

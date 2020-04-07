@@ -4,6 +4,7 @@ import OrderOverview from '../views/OrderOverview.vue'
 import NewOrder from '../views/NewOrder.vue'
 import MyProfile from '../views/MyProfile.vue'
 import LoginForm from '../views/LoginForm.vue'
+import RegisterForm from '../views/RegisterForm.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: LoginForm
+  },
+  {
+    path: '/register-new-user',
+    name: 'registerNewUser',
+    component: RegisterForm
   }
 ]
 
