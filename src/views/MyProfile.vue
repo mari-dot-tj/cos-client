@@ -18,7 +18,7 @@
                     </v-col>
                     <v-col cols="6">
                         <v-text-field
-                        v-model="org_number"
+                        v-model="orgNumber"
                         label="Organisation number"
                         prepend-icon="mdi-numeric"
                         :rules="nameRules"
@@ -66,7 +66,7 @@
                     </v-col>
                     <v-col cols="6">
                         <v-text-field
-                        v-model="zip_code"
+                        v-model="zipCode"
                         label="Zip code"
                         prepend-icon="mdi-map-marker"
                         :rules="zipCodeRules"
@@ -118,6 +118,7 @@
 <script>
 import NavBar from '../components/NavBar/NavBar.vue';
 import { mapActions, mapGetters } from 'vuex'
+import placeService from '@/api/place.api'
 
 export default {
   name: 'MyProfile',
@@ -129,11 +130,11 @@ export default {
         name: '',
         address: '',
         phone: '',
-        org_number: '',
+        orgNumber: '',
         email: '',
         active: '',
         password: '',
-        zip_code: '',
+        zipCode: '',
         province: '',
         subscription: '',
         ref_id: '',
@@ -146,7 +147,7 @@ export default {
         phoneRules: [
             v => !!v || 'Phone number is required'
         ],
-        org_numberRules: [
+        orgNumberRules: [
             v => !!v || 'Organisation number is required'
         ],
         emailRules: [
@@ -163,15 +164,15 @@ export default {
         ...mapActions('account', ['getProvinceByZip'])
     },
     watch: {
-        zip_code: function(newVal, oldVal){
+        zipCode: function(newVal, oldVal){
             if(newVal.length==0){
                 this.province=''
             }else if(newVal.length>=4){
-                this.getProvinceByZip(newVal)
-                .then(res => {
-                    console.log("Response fra vuex: ",res)
-                    if(res[0].province!=undefined){
-                        this.province=res[0].province
+                placeService.getProvinceByZip(newVal)
+                .then(response => {
+                    console.log(response)
+                    if(response!=undefined){
+                        this.province=response[0].province
                     }else this.province=''
                 })
                 .catch(error => {
