@@ -23,7 +23,7 @@ class CustomerService {
         return httpClient.post(this.END_POINT+'/login', jsonLoginInfo)
         .then(function (response){
             console.log(response)
-            return response.status
+            return response
         })
         .catch((error) => {
             console.warn(error)
@@ -36,6 +36,17 @@ class CustomerService {
         .then(function(response){
             console.log(response)
             return response.status
+        })
+        .catch((error) => {
+            console.warn(error)
+        })
+    }
+
+    async logout(){
+        return httpClient.post(this.END_POINT+'/logout')
+        .then(function (response){
+            console.log(response)
+            return response
         })
         .catch((error) => {
             console.warn(error)

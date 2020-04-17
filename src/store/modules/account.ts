@@ -1,55 +1,49 @@
 import { Module } from 'vuex/types'
-import customerService from '@/api/customer.api'
-import placeService from '@/api/place.api'
+import httpClient from '@/api/httpClient'
 
 interface AccountState {
-    loggedIn: boolean;
+    token: '',
+    user: {}
 }
 
 const state: AccountState = {
-    loggedIn: false
+    token: '',
+    user: {}
 }
 
 const module: Module<AccountState, {}> = {
     namespaced: true,
     state,
     mutations: {
-        setLoggedIn(state, loggedInStatus){
-            state.loggedIn = loggedInStatus
+        SET_TOKEN: (state, token) => {
+            state.token = token
+        },
+        SET_USER: (state, user) => {
+            state.user = user
+        },
+        RESET: state => {
+            state.token = '',
+            state.user = {}
         }
     },
     actions: {
-        login: ({commit}, { username, password }) => {
-            return new Promise((resolve, reject) => {
-                customerService.login(username, password).then(response => {
-                    if(response==200){
-                        commit('setLoggedIn', true)
-                    }else{
-                        commit('setLoggedIn', false)
-                    }
-                    resolve(response)
-                }, error => {
-                    reject(error)
-                })
-            })
+        login: ({ commit, state }, { token, user }) => {
+            commit('SET_TOKEN', token)
+            commit('SET_USER', user)
+            // set auth header
+            httpClient.defaults.headers.common['Authorization'] = `Bearer ${token}`
         },
-        register: ({commit}, {name, address, phone, org_number, email, zip_code, subscription}) => {
-            return new Promise((resolve, reject) => {
-                customerService.register({name, address, phone, org_number, email, zip_code, subscription}).then(response => {
-                    resolve(response)
-                }, error => {
-                    reject(error)
-                })
-            })
+        logout: ({ commit }) => {
+            console.log('logging out')
+            commit('RESET');
+        }
+    },
+    getters: {
+        isLoggedIn: state => {
+            return state.token
         },
-        getProvinceByZip: ({commit}, zip) =>{
-            return new Promise((resolve, reject) => {
-                placeService.getProvinceByZip(zip).then(response => {
-                    resolve(response)
-                }, error => {
-                    reject(error)
-                })
-            })
+        getUser: state => {
+            return state.user
         }
     }
 }

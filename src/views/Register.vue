@@ -130,7 +130,7 @@
           >
             OK
           </v-btn>
-        </v-card-actions>
+    </v-card-actions>
       </v-card>
       <v-card v-if="successFulPostDialog">
         <v-card-title
@@ -200,6 +200,8 @@
 
 <script>
 import { mapActions } from 'vuex'
+import customerService from '@/api/customer.api'
+import placeService from '@/api/place.api'
 
 export default {
     name: 'Register',
@@ -243,16 +245,18 @@ export default {
         ...mapActions('account', ['getProvinceByZip', 'register']),
         registerIfValid(){
             if(this.$refs.form.validate()){
-                this.register({name: this.name, address: this.address , phone: this.phone, org_number: this.orgNumber, email: this.email, zip_code: this.zipCode, subscription: this.subscription})
-                .then(res => {
-                    console.log("Response fra vuex (register): ",res)
-                    if(res == 201 || res == 200){
+                customerService.register({name: this.name, address: this.address , phone: this.phone, org_number: this.orgNumber, email: this.email, zip_code: this.zipCode, subscription: this.subscription})
+                .then(response => {
+                    if(response == 201 || response == 200){
                         this.failedPostDialog = false
                         this.successFulPostDialog = true
                     }else{
                         this.failedPostDialog=true
                         this.successFulPostDialog=false
                     }
+                })
+                .catch(error => {
+                    console.log(error)
                 })
             }else{
                 this.notValidFormDialog=true
@@ -264,11 +268,11 @@ export default {
             if(newVal.length==0){
                 this.province=''
             }else if(newVal.length>=4){
-                this.getProvinceByZip(newVal)
-                .then(res => {
-                    console.log("Response fra vuex (province): ",res)
-                    if(res!=undefined){
-                        this.province=res[0].province
+                placeService.getProvinceByZip(newVal)
+                .then(response => {
+                    console.log(response)
+                    if(response!=undefined){
+                        this.province=response[0].province
                     }else this.province=''
                 })
                 .catch(error => {

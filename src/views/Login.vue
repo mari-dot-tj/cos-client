@@ -126,6 +126,7 @@
 <script>
 import Vue from 'vue'
 import { mapState, mapActions } from 'vuex'
+import customerService from '@/api/customer.api'
 
 export default Vue.extend({
     name: 'Login',
@@ -148,20 +149,26 @@ export default Vue.extend({
         ...mapActions('account', ['login']),
         loginIfValid(){
             if(this.$refs.form.validate()){
-                this.login({username: this.username, password: this.password})
-                .then(res => {
-                    if(res == 200){
-                        this.failedLoginDialog = false
-                        this.$router.push('/order-overview')
-                    }else this.failedLoginDialog=true
+                customerService.login(this.username, this.password)
+                .then(response => {
+                  if(response!==undefined && response.status == 200){
+                    const token = response.data.token
+                    const user = response.data.customer
+                    this.login({token, user})
+
+                    this.failedLoginDialog = false
+                    this.$router.push('/order-overview')
+                  }else{
+                    this.failedLoginDialog=true
+                  } 
                 })
-            }else{
-                this.notValidFormDialog=true
-            }
+                .catch((error) => {
+                  this.failedLoginDialog=true
+                })
+          }else{
+              this.notValidFormDialog=true
+          }
         }
-    },
-    computed: {
-        ...mapState('account', ['loggedIn'])
     }
 })
 </script>
