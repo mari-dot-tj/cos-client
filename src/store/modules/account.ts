@@ -35,7 +35,8 @@ const module: Module<AccountState, {}> = {
         },
         logout: ({ commit }) => {
             console.log('logging out')
-            commit('RESET');
+            commit('RESET')
+            commit('order/deleteAllItemsFromOrder', null, { root: true })
         }
     },
     getters: {

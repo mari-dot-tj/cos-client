@@ -18,7 +18,7 @@ export default new Vuex.Store({
   },
   plugins: [
     createPersistedState({
-      paths: ['account'],
+      paths: ['account', 'order'],
     }),
   ],
   modules: {
