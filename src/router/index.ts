@@ -5,6 +5,7 @@ import NewOrder from '../views/NewOrder.vue'
 import MyProfile from '../views/MyProfile.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
+import NotFound from '../views/NotFound.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,11 @@ const routes = [
     path: '/register-new-user',
     name: 'registerNewUser',
     component: Register
+  },
+  {
+    path: '*',
+    name: 'notFound',
+    component: NotFound
   }
 ]
 
