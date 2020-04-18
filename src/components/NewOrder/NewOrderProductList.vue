@@ -2,7 +2,7 @@
     <v-container>
         <NewOrderProductFields/>
         <NewOrderProductListItem
-        v-for="coffee in allCoffees"
+        v-for="coffee in coffees"
         v-on:add-to-order="addToOrder"
         :key="coffee.coffee_id"
         :coffeeId="coffee.coffee_id"
@@ -32,13 +32,12 @@
 import { mapState } from 'vuex'
 import NewOrderProductListItem from './NewOrderProductListItem.vue'
 import NewOrderProductFields from './NewOrderProductFields.vue'
+import bagService from '@/api/bags.api'
 
 export default {
     name: 'NewOrderProductList',
     computed: {
-        ...mapState('products',['allCoffees']),
-        ...mapState('products', ['allBags']),
-        ...mapState('products', ['allGroundLevels'])
+        ...mapState('products',['coffees'])
     },
     data: () => ({
         itemId: 0,
@@ -47,14 +46,14 @@ export default {
     }),
     methods: {
         init(){
-            this.$store.dispatch('products/getAllCoffees')
+            this.$store.dispatch('products/getCustomerCoffees')
             setTimeout(()=>{
-                this.$store.dispatch('products/getAllBags')
+                this.$store.dispatch('products/getCustomerBags')
                 this.$store.dispatch('products/getAllGroundLevels')
             }, 500)
         },
         incrementItemId(){
-            return this.itemId++;
+            return this.itemId++
         },
         addToOrder: function(coffeeId, coffeeName, weight, grams, bagId, groundLevel, groundLevelId, amount){
             let text = "Failed to add to order."
