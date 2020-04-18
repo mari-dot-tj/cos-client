@@ -89,13 +89,12 @@
                         </v-col>
                     </v-row>
                     <v-row>
-                        <v-col cols="6">
-                            <v-checkbox
-                            v-model="subscription"
-                            false-value='0'
-                            true-value='1'
-                            label="We would like to receice weekly emails with news and updates"></v-checkbox>
-                        </v-col>
+                        <v-checkbox
+                        v-model="subscription"
+                        false-value='0'
+                        true-value='1'
+                        label="We would like to receice weekly emails with news and updates">
+                        </v-checkbox>
                     </v-row>
                     <v-btn
                     color="primary"

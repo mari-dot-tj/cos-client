@@ -52,6 +52,29 @@ class CustomerService {
             console.warn(error)
         })
     }
+
+    async logoutAll(){
+        return httpClient.post(this.END_POINT+'/logout-all')
+        .then(function (response){
+            console.log(response)
+            return response
+        })
+        .catch((error) => {
+            console.warn(error)
+        })
+    }
+
+    async update(customer: Customer){
+        const jsonCustomer = JSON.stringify(customer)
+        return httpClient.put(this.END_POINT, jsonCustomer)
+        .then(function (response){
+            console.log(response)
+            return response
+        })
+        .catch((error) => {
+            console.warn(error)
+        })
+    }
 }
 const customerService = new CustomerService
 export default customerService

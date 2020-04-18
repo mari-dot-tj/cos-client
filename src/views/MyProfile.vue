@@ -1,124 +1,259 @@
 <template>
-  <v-container>
-    <NavBar/>
-    <v-card>
-      <form class="registerForm">
-                <h2>My profile</h2>
-                <v-row>
-                    <v-col cols="6">
-                        <v-text-field
+    <v-dialog
+    persistent
+    v-model="dialog"
+    width="800">
+    <template v-slot:activator="{ on }">
+        <v-container>
+            <NavBar/>
+            <v-card>
+                <v-form class="myProfileForm">
+                    <h2>My profile</h2>
+                    <v-row>
+                        <v-col cols="6">
+                            <v-text-field
+                                v-model="user.name"
+                                label="Organisation name"
+                                prepend-icon="mdi-briefcase-account"
+                                :rules="nameRules"
+                                disabled>
+                            </v-text-field>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-text-field
+                                v-model="user.org_number"
+                                label="Organisation number"
+                                prepend-icon="mdi-numeric"
+                                :rules="orgNumberRules"
+                                disabled>
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="6">
+                            <v-text-field
+                            v-model="user.phone"
+                            label="Phone number"
+                            prepend-icon="mdi-phone"
+                            :rules="phoneRules"
+                            disabled>
+                            </v-text-field>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-text-field
+                            v-model="user.email"
+                            label="Email address"
+                            prepend-icon="mdi-at"
+                            :rules="emailRules"
+                            disabled>
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="6">
+                            <v-text-field
+                            v-model="user.address"
+                            label="Address"
+                            prepend-icon="mdi-home-city"
+                            :rules="addressRules"
+                            disabled>
+                            </v-text-field>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-text-field
+                            v-model="user.zip_code"
+                            label="Zip code"
+                            prepend-icon="mdi-map-marker"
+                            :rules="zipCodeRules"
+                            disabled>
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="6">
+                            <v-text-field
+                            label="Province"
+                            prepend-icon="mdi-city"
+                            v-model="province"
+                            :rules="provinceRules"
+                            disabled>
+                            {{province}}
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-checkbox
+                        v-model="subscription"
+                        false-value='0'
+                        true-value='1'
+                        label="We would like to receice weekly emails with news and updates"
+                        disabled>
+                        </v-checkbox>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="4">
+                            <v-btn
+                            color="primary"
+                            class="registerBtn"
+                            v-on="on"
+                            @click="formDialog=true"
+                            >
+                                Edit information
+                            </v-btn>
+                        </v-col>
+                        <v-col cols="4">
+                            <v-btn
+                            color="primary"
+                            class="registerBtn"
+                            v-on="on"
+                            >
+                                Change password
+                            </v-btn>
+                        </v-col>
+                        <v-col cols="4">
+                            <v-btn
+                            color="primary"
+                            class="registerBtn"
+                            @click="logoutAllDialog=true"
+                            v-on="on"
+                            >
+                                Log out of all devices
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </v-form>
+            </v-card>
+        </v-container>
+    </template>
+    <v-card v-if="formDialog">
+        <v-form class="myProfileForm" ref="form">
+            <h2>Edit information</h2>
+            <v-row>
+                <v-col cols="6">
+                    <v-text-field
                         v-model="name"
                         label="Organisation name"
                         prepend-icon="mdi-briefcase-account"
                         :rules="nameRules"
-                        required
-                        v-bind:readonly="!editMode"
-                        >
-                        </v-text-field>
-                    </v-col>
-                    <v-col cols="6">
-                        <v-text-field
+                        required>
+                    </v-text-field>
+                </v-col>
+                <v-col cols="6">
+                    <v-text-field
                         v-model="orgNumber"
                         label="Organisation number"
                         prepend-icon="mdi-numeric"
-                        :rules="nameRules"
-                        required
-                        v-bind:readonly="!editMode"
-                        >
-                        </v-text-field>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col cols="6">
-                        <v-text-field
-                        v-model="phone"
-                        label="Phone number"
-                        prepend-icon="mdi-phone"
-                        :rules="nameRules"
-                        required
-                        v-bind:readonly="!editMode"
-                        >
-                        </v-text-field>
-                    </v-col>
-                    <v-col cols="6">
-                        <v-text-field
-                        v-model="email"
-                        label="Email address"
-                        prepend-icon="mdi-at"
-                        :rules="nameRules"
-                        required
-                        v-bind:readonly="!editMode"
-                        >
-                        </v-text-field>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col cols="6">
-                        <v-text-field
-                        v-model="address"
-                        label="Address"
-                        prepend-icon="mdi-home-city"
-                        :rules="addressRules"
-                        required
-                        v-bind:readonly="!editMode"
-                        >
-                        </v-text-field>
-                    </v-col>
-                    <v-col cols="6">
-                        <v-text-field
-                        v-model="zipCode"
-                        label="Zip code"
-                        prepend-icon="mdi-map-marker"
-                        :rules="zipCodeRules"
-                        v-bind:readonly="!editMode"
-                        required
-                        >
-                        </v-text-field>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col cols="6">
-                        <v-text-field
-                        label="Province"
-                        prepend-icon="mdi-city"
-                        v-model="province"
-                        readonly
-                        >
-                        {{province}}
-                        </v-text-field>
-                    </v-col>
-                </v-row>
-                <v-btn
-                color="primary"
-                class="registerBtn"
-                @click="editMode=!editMode">
-                    Edit
-                </v-btn>
-            </form>
+                        :rules="orgNumberRules"
+                        required>
+                    </v-text-field>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col cols="6">
+                    <v-text-field
+                    v-model="phone"
+                    label="Phone number"
+                    prepend-icon="mdi-phone"
+                    :rules="phoneRules"
+                    required>
+                    </v-text-field>
+                </v-col>
+                <v-col cols="6">
+                    <v-text-field
+                    v-model="email"
+                    label="Email address"
+                    prepend-icon="mdi-at"
+                    :rules="emailRules"
+                    required>
+                    </v-text-field>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col cols="6">
+                    <v-text-field
+                    v-model="address"
+                    label="Address"
+                    prepend-icon="mdi-home-city"
+                    :rules="addressRules"
+                    required>
+                    </v-text-field>
+                </v-col>
+                <v-col cols="6">
+                    <v-text-field
+                    v-model="zipCode"
+                    label="Zip code"
+                    prepend-icon="mdi-map-marker"
+                    :rules="zipCodeRules"
+                    required>
+                    </v-text-field>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col cols="6">
+                    <v-text-field
+                    label="Province"
+                    prepend-icon="mdi-city"
+                    v-model="province"
+                    :rules="provinceRules"
+                    readonly>
+                    {{province}}
+                    </v-text-field>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-checkbox
+                v-model="subscription"
+                false-value='0'
+                true-value='1'
+                label="We would like to receice weekly emails with news and updates">
+                </v-checkbox>
+            </v-row>
+            <v-btn
+            color="primary"
+            outlined
+            @click="formDialog=false; dialog=false">
+                Close
+            </v-btn>
+            <v-btn
+            color="primary"
+            @click="updateIfValid(); formDialog=false; dialog=false">
+                Save
+            </v-btn>
+        </v-form>
     </v-card>
-  </v-container>
+    <v-card v-if="logoutAllDialog">
+        <v-card-title>Log out of all devices</v-card-title>
+        <v-card-text>Are you sure you want to log out of all devices?</v-card-text>
+        <v-card-actions>
+            <v-btn 
+            outlined
+            color="primary"
+            @click="logoutAllDialog=false; dialog=false">
+                No
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn
+            color="primary"
+            @click="logoutAll">
+                Yes
+            </v-btn>
+        </v-card-actions>
+    </v-card>
+    </v-dialog>
 </template>
 
 <style scoped>
-.registerForm{
+.myProfileForm{
     padding: 8%;
     color: #59c8a5;
-}
-.province{
-    color: black;
-    padding-bottom: 0;
-    margin-bottom: 0;
-    align-self: baseline;
-}
-.registerBtn{
-    align-self: center;
 }
 </style>
 
 <script>
 import NavBar from '../components/NavBar/NavBar.vue';
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import placeService from '@/api/place.api'
+import customerService from '@/api/customer.api'
 
 export default {
   name: 'MyProfile',
@@ -132,12 +267,10 @@ export default {
         phone: '',
         orgNumber: '',
         email: '',
-        active: '',
         password: '',
         zipCode: '',
         province: '',
         subscription: '',
-        ref_id: '',
         nameRules: [
             v => !!v || 'Organisation name is required'
         ],
@@ -159,9 +292,59 @@ export default {
         zipCodeRules: [
             v => !!v || 'Zip code is required'
         ],
+        dialog: false,
+        formDialog: false,
+        logoutAllDialog: false
     }),
     methods: {
-        ...mapActions('account', ['getProvinceByZip'])
+        init(){
+            this.name = this.user.name
+            this.orgNumber = this.user.org_number
+            this.address = this.user.address
+            this.phone = this.user.phone
+            this.email = this.user.email
+            this.active = this.user.active
+            this.zipCode = this.user.zip_code
+            this.subscription = (this.user.subscription).toString()
+            placeService.getProvinceByZip(this.zipCode)
+            .then(response => {
+                console.log(response)
+                if(response!=undefined){
+                    this.province=response[0].province
+                }else this.province=''
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        updateIfValid(){
+            if(this.$refs.form.validate()){
+                customerService.update({name: this.name, address: this.address , phone: this.phone, org_number: this.orgNumber, email: this.email, zip_code: this.zipCode, subscription: this.subscription})
+                .then(response => {
+                    if(response!=undefined && response.status == 200){
+                        const newUserInfo = {name: this.name, address: this.address , phone: this.phone, org_number: this.orgNumber, email: this.email, zip_code: this.zipCode, subscription: this.subscription}
+                        this.$store.dispatch('account/updateUser', newUserInfo)
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            }else{
+                console.log('not valid form')
+            }
+        },
+        logoutAll(){
+            customerService.logoutAll()
+            .then(response => {
+                console.log(response)
+                if(response.status==200){
+                    this.$router.push('/login')
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        }
     },
     watch: {
         zipCode: function(newVal, oldVal){
@@ -182,12 +365,17 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('account', ['isLoggedIn'])
+        ...mapGetters('account', ['isLoggedIn']),
+        ...mapState('account', ['user']),
+        ...mapActions('account', ['updateUser'])
     },
     created(){
         if (!this.isLoggedIn) {
             this.$router.push('/login');
         }
+    },
+    mounted(){
+        this.init()
     }
 }
 </script>
