@@ -64,9 +64,25 @@ class CustomerService {
         })
     }
 
-    async update(customer: Customer){
+    async updateCustomer(customer: Customer){
         const jsonCustomer = JSON.stringify(customer)
         return httpClient.put(this.END_POINT, jsonCustomer)
+        .then(function (response){
+            console.log(response)
+            return response
+        })
+        .catch((error) => {
+            console.warn(error)
+        })
+    }
+
+    async updatePassword(oldPassword: String, newPassword: String){
+        const passUpdate = {
+            oldPassword: oldPassword,
+            newPassword: newPassword
+        }
+        const jsonPassUpdate = JSON.stringify(passUpdate)
+        return httpClient.put(this.END_POINT+'/sensitive', jsonPassUpdate)
         .then(function (response){
             console.log(response)
             return response

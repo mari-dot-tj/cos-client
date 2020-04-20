@@ -7,121 +7,123 @@
         <v-container>
             <NavBar/>
             <v-card>
-                <v-form class="myProfileForm">
-                    <h2>My profile</h2>
-                    <v-row>
-                        <v-col cols="6">
-                            <v-text-field
-                                v-model="user.name"
-                                label="Organisation name"
-                                prepend-icon="mdi-briefcase-account"
-                                :rules="nameRules"
+                <v-card-title color="primary">
+                    <h2 class="mx-auto">My profile</h2>
+                </v-card-title>
+                <v-card-text>
+                    <v-form class="myProfileForm">
+                        <v-row>
+                            <v-col cols="6">
+                                <v-text-field
+                                    v-model="user.name"
+                                    label="Organisation name"
+                                    prepend-icon="mdi-briefcase-account"
+                                    :rules="nameRules"
+                                    disabled>
+                                </v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                                <v-text-field
+                                    v-model="user.org_number"
+                                    label="Organisation number"
+                                    prepend-icon="mdi-numeric"
+                                    :rules="orgNumberRules"
+                                    disabled>
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="6">
+                                <v-text-field
+                                v-model="user.phone"
+                                label="Phone number"
+                                prepend-icon="mdi-phone"
+                                :rules="phoneRules"
                                 disabled>
-                            </v-text-field>
-                        </v-col>
-                        <v-col cols="6">
-                            <v-text-field
-                                v-model="user.org_number"
-                                label="Organisation number"
-                                prepend-icon="mdi-numeric"
-                                :rules="orgNumberRules"
+                                </v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                                <v-text-field
+                                v-model="user.email"
+                                label="Email address"
+                                prepend-icon="mdi-at"
+                                :rules="emailRules"
                                 disabled>
-                            </v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col cols="6">
-                            <v-text-field
-                            v-model="user.phone"
-                            label="Phone number"
-                            prepend-icon="mdi-phone"
-                            :rules="phoneRules"
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="6">
+                                <v-text-field
+                                v-model="user.address"
+                                label="Address"
+                                prepend-icon="mdi-home-city"
+                                :rules="addressRules"
+                                disabled>
+                                </v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                                <v-text-field
+                                v-model="user.zip_code"
+                                label="Zip code"
+                                prepend-icon="mdi-map-marker"
+                                :rules="zipCodeRules"
+                                disabled>
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="6">
+                                <v-text-field
+                                label="Province"
+                                prepend-icon="mdi-city"
+                                v-model="province"
+                                :rules="provinceRules"
+                                disabled>
+                                {{province}}
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-checkbox
+                            v-model="subscription"
+                            false-value='0'
+                            true-value='1'
+                            label="We would like to receice weekly emails with news and updates"
                             disabled>
-                            </v-text-field>
-                        </v-col>
-                        <v-col cols="6">
-                            <v-text-field
-                            v-model="user.email"
-                            label="Email address"
-                            prepend-icon="mdi-at"
-                            :rules="emailRules"
-                            disabled>
-                            </v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col cols="6">
-                            <v-text-field
-                            v-model="user.address"
-                            label="Address"
-                            prepend-icon="mdi-home-city"
-                            :rules="addressRules"
-                            disabled>
-                            </v-text-field>
-                        </v-col>
-                        <v-col cols="6">
-                            <v-text-field
-                            v-model="user.zip_code"
-                            label="Zip code"
-                            prepend-icon="mdi-map-marker"
-                            :rules="zipCodeRules"
-                            disabled>
-                            </v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col cols="6">
-                            <v-text-field
-                            label="Province"
-                            prepend-icon="mdi-city"
-                            v-model="province"
-                            :rules="provinceRules"
-                            disabled>
-                            {{province}}
-                            </v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-checkbox
-                        v-model="subscription"
-                        false-value='0'
-                        true-value='1'
-                        label="We would like to receice weekly emails with news and updates"
-                        disabled>
-                        </v-checkbox>
-                    </v-row>
-                    <v-row>
-                        <v-col cols="4">
-                            <v-btn
-                            color="primary"
-                            class="registerBtn"
-                            v-on="on"
-                            @click="formDialog=true"
-                            >
-                                Edit information
-                            </v-btn>
-                        </v-col>
-                        <v-col cols="4">
-                            <v-btn
-                            color="primary"
-                            class="registerBtn"
-                            v-on="on"
-                            >
-                                Change password
-                            </v-btn>
-                        </v-col>
-                        <v-col cols="4">
-                            <v-btn
-                            color="primary"
-                            class="registerBtn"
-                            @click="logoutAllDialog=true"
-                            v-on="on"
-                            >
-                                Log out of all devices
-                            </v-btn>
-                        </v-col>
-                    </v-row>
-                </v-form>
+                            </v-checkbox>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="4">
+                                <v-btn
+                                color="primary"
+                                class="registerBtn"
+                                v-on="on"
+                                @click="formDialog=true">
+                                    Edit information
+                                </v-btn>
+                            </v-col>
+                            <v-col cols="4">
+                                <v-btn
+                                color="primary"
+                                class="registerBtn"
+                                v-on="on"
+                                @click="changePasswordDialog=true">
+                                    Change password
+                                </v-btn>
+                            </v-col>
+                            <v-col cols="4">
+                                <v-btn
+                                color="primary"
+                                class="registerBtn"
+                                @click="logoutAllDialog=true"
+                                v-on="on">
+                                    Log out of all devices
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-form>
+                </v-card-text>
             </v-card>
         </v-container>
     </template>
@@ -216,10 +218,51 @@
             </v-btn>
             <v-btn
             color="primary"
-            @click="updateIfValid(); formDialog=false; dialog=false">
+            @click="updateCustomerIfValid(); formDialog=false; dialog=false">
                 Save
             </v-btn>
         </v-form>
+    </v-card>
+    <v-card v-if="changePasswordDialog">
+        <v-card-title>
+            <h2 class="mx-auto">Change password</h2>
+        </v-card-title>
+        <v-card-text>
+            <v-form ref="passwordForm">
+                <v-text-field 
+                type="password"
+                label="Old password"
+                prepend-icon="mdi-lock"
+                :rules="passwordRules"
+                required
+                v-model="oldPassword"/>
+                <v-text-field 
+                type="password"
+                label="New password"
+                prepend-icon="mdi-lock"
+                :rules="passwordRules"
+                required
+                v-model="newPassword"/>
+                <v-text-field 
+                type="password"
+                label="Repeat new password"
+                prepend-icon="mdi-lock"
+                :rules="passwordRules"
+                required
+                v-model="newPasswordRep"/>
+                <v-btn
+                color="primary"
+                outlined
+                @click="changePasswordDialog=false; dialog=false">
+                    Close
+                </v-btn>
+                <v-btn
+                color="primary"
+                @click="updatePasswordIfValid();changePasswordDialog=false;">
+                    Save
+                </v-btn>
+            </v-form>
+        </v-card-text>
     </v-card>
     <v-card v-if="logoutAllDialog">
         <v-card-title>Log out of all devices</v-card-title>
@@ -236,6 +279,20 @@
             color="primary"
             @click="logoutAll">
                 Yes
+            </v-btn>
+        </v-card-actions>
+    </v-card>
+    <v-card v-if="changePasswordFeedbackDialog">
+        <v-card-title>
+            {{passwordChangeFeedbackTitle}}
+        </v-card-title>
+        <v-card-text>{{passwordChangeFeedbackMsg}}</v-card-text>
+        <v-card-actions>
+            <v-btn
+            right
+            color="primary"
+            @click="changePasswordFeedbackDialog=false; dialog=false">
+                Ok
             </v-btn>
         </v-card-actions>
     </v-card>
@@ -267,7 +324,9 @@ export default {
         phone: '',
         orgNumber: '',
         email: '',
-        password: '',
+        oldPassword: '',
+        newPassword: '',
+        newPasswordRep: '',
         zipCode: '',
         province: '',
         subscription: '',
@@ -281,7 +340,8 @@ export default {
             v => !!v || 'Phone number is required'
         ],
         orgNumberRules: [
-            v => !!v || 'Organisation number is required'
+            v => !!v || 'Organisation number is required',
+            //v => v.length!=9 || 'Organisation number must be 9 digits'
         ],
         emailRules: [
             v => !!v || 'Email address is required'
@@ -292,9 +352,16 @@ export default {
         zipCodeRules: [
             v => !!v || 'Zip code is required'
         ],
+        passwordRules: [
+            v => !!v || 'This field is required'
+        ],
+        passwordChangeFeedbackMsg: '',
+        passwordChangeFeedbackTitle: '',
         dialog: false,
         formDialog: false,
-        logoutAllDialog: false
+        logoutAllDialog: false,
+        changePasswordDialog: false,
+        changePasswordFeedbackDialog: false
     }),
     methods: {
         init(){
@@ -317,9 +384,14 @@ export default {
                 console.log(error)
             })
         },
-        updateIfValid(){
+        resetPasswordField(){
+            this.oldPassword = '',
+            this.newPassword = '',
+            this.newPasswordRep = ''
+        },
+        updateCustomerIfValid(){
             if(this.$refs.form.validate()){
-                customerService.update({name: this.name, address: this.address , phone: this.phone, org_number: this.orgNumber, email: this.email, zip_code: this.zipCode, subscription: this.subscription})
+                customerService.updateCustomer({name: this.name, address: this.address , phone: this.phone, org_number: this.orgNumber, email: this.email, zip_code: this.zipCode, subscription: this.subscription})
                 .then(response => {
                     if(response!=undefined && response.status == 200){
                         const newUserInfo = {name: this.name, address: this.address , phone: this.phone, org_number: this.orgNumber, email: this.email, zip_code: this.zipCode, subscription: this.subscription}
@@ -331,6 +403,37 @@ export default {
                 })
             }else{
                 console.log('not valid form')
+            }
+        },
+        updatePasswordIfValid(){
+            if(this.$refs.passwordForm.validate()){
+                if(this.newPassword!==this.newPasswordRep){
+                    this.passwordChangeFeedbackTitle = 'Error'
+                    this.passwordChangeFeedbackMsg = 'New password repetiotion does not match. Try again.'
+                    this.changePasswordFeedbackDialog=true
+                }else{
+                customerService.updatePassword(this.oldPassword, this.newPassword)
+                .then(response => {
+                    if(response!=undefined && response.status == 200){
+                        this.passwordChangeFeedbackTitle = 'Success'
+                        this.passwordChangeFeedbackMsg = 'Password successfully changed.'
+                        this.changePasswordFeedbackDialog=true
+                    }else{
+                        this.passwordChangeFeedbackTitle = 'Error'
+                        this.passwordChangeFeedbackMsg = 'Unable to change old password. Try again.'
+                        this.changePasswordFeedbackDialog=true
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+                }
+                this.resetPasswordField()
+            }else{
+                this.passwordChangeFeedbackTitle = 'Error'
+                this.passwordChangeFeedbackMsg = 'Request not valid. Fill in required fields and try again.'
+                this.changePasswordFeedbackDialog=true
+                this.resetPasswordField()
             }
         },
         logoutAll(){
