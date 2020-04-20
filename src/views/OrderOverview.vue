@@ -1,18 +1,21 @@
 <template>
   <v-container>
     <NavBar/>
-    <p>OrderOverview page</p>
+    <OrderOverviewTab/>
   </v-container>
 </template>
 
 <script>
 import NavBar from '../components/NavBar/NavBar.vue'
+import OrderOverviewTab from '@/components/OrderOverview/OrderOverviewTab'
 import { mapGetters } from 'vuex'
+import { mount } from '@vue/test-utils'
 
 export default {
   name: 'OrderOverview',
   components: {
-    NavBar
+    NavBar,
+    OrderOverviewTab
   },
   computed: {
     ...mapGetters('account', ['isLoggedIn'])

@@ -23,6 +23,17 @@ class OrderService {
 
     private END_POINT = '/order'
 
+    async getOrders(){
+        return httpClient.get(this.END_POINT)
+        .then(function (response) {
+            console.log(response)
+            return response
+        })
+        .catch((error) => {
+            console.warn(error)
+        })
+    }
+
     async postOrder(items: [], delivery_id: number){
         const obj = {
             info: "Info",

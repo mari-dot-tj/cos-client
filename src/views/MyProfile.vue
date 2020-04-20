@@ -213,11 +213,13 @@
             <v-btn
             color="primary"
             outlined
+            class="mr-4"
             @click="formDialog=false; dialog=false">
                 Close
             </v-btn>
             <v-btn
             color="primary"
+            class="mr-4"
             @click="updateCustomerIfValid(); formDialog=false; dialog=false">
                 Save
             </v-btn>
@@ -253,11 +255,13 @@
                 <v-btn
                 color="primary"
                 outlined
+                class="mr-4"
                 @click="changePasswordDialog=false; dialog=false">
                     Close
                 </v-btn>
                 <v-btn
                 color="primary"
+                class="mr-4"
                 @click="updatePasswordIfValid();changePasswordDialog=false;">
                     Save
                 </v-btn>
