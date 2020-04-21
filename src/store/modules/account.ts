@@ -82,6 +82,7 @@ const module: Module<AccountState, {}> = {
             console.log('logging out')
             commit('RESET')
             commit('order/deleteAllItemsFromOrder', null, { root: true })
+            commit('order/resetItemId', null, { root: true })
         },
         updateUser: ({ commit }, userinfo) => {
             console.log('updating user state')
