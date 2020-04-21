@@ -7,7 +7,7 @@ import httpClient from '@/api/httpClient'
 
 Vue.config.productionTip = false
 
-httpClient.defaults.headers.common['Authorization'] = `Bearer ${store.state.account.token}`
+httpClient.defaults.headers.common['Authorization'] = `Bearer ${(<any>store.state).account.token}`
 
 new Vue({
   router,
