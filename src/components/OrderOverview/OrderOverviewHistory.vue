@@ -38,6 +38,7 @@ export default {
             .then((response) => {
                 if(typeof response != 'undefined'){
                     response.data.map(coffeeOrderObj => {
+                        /* Adds order to orders if orderId does not exist in orders */
                         if( this.orders.length==0 || (this.orders.find(order => order.orderId == coffeeOrderObj.order_id)) == undefined ){
                                 this.orders.push({
                                 orderId: coffeeOrderObj.order_id,
@@ -51,7 +52,7 @@ export default {
                                 })
                             }
                     })
-
+                    /* Adds coffees to list order object in orders if orderId matches*/
                     for(let i=0; i<this.orders.length; i++){
                         response.data.map(coffee => {
                             if(coffee.order_id == this.orders[i].orderId){
@@ -63,13 +64,21 @@ export default {
                             }
                         })
                     }
+
+                    /* Sorts orders by date - newest first */
+                    this.orders.sort(function compare(a, b) {
+                        var dateA = new Date(a.orderDate);
+                        var dateB = new Date(b.orderDate);
+                        return dateB - dateA;
+                    })
+
                     console.log('ordreliste: ',this.orders)
                 }
             })
             .catch((error) => {
                 console.warn(error)
             })
-        }
+        },
     },
     mounted(){
         this.init()

@@ -1,7 +1,7 @@
 <template>
     <v-expansion-panel>
         <v-expansion-panel-header v-slot="{ open }" style="background:#EEFAF6;">
-            <v-fade-transition leave-absolute>
+            <v-fade-transition>
                 <v-row v-if="open">
                     <v-col cols="3">
                         <p class="inline">Order date: </p>{{orderDate.getDate()+'/'+orderDate.getMonth()+'/'+orderDate.getYear()}}
@@ -11,8 +11,8 @@
                         <p class="inline">Order number: </p>{{orderId}}
                     </v-col>
                 </v-row>
-            
-                <v-row>
+                
+                <v-row v-else>
                     <v-col cols="3">
                         <p class="inline">Order date: </p>{{orderDate.getDate()+'/'+orderDate.getMonth()+'/'+orderDate.getYear()}}
                     </v-col>
