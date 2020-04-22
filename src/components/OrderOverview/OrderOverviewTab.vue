@@ -22,7 +22,7 @@
         <v-card
           flat
         >
-          <v-card-text>helo</v-card-text>
+          <v-card-text>Fixed order to be implemented here</v-card-text>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
