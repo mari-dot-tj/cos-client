@@ -108,7 +108,11 @@ const module: Module<OrderState, {}> = {
           reject(error)
         })
       })
-    }
+    },
+    cancelOrder: ({commit}) => {
+      commit('deleteAllItemsFromOrder')
+      commit('resetItemId')
+    },
   },
   getters: {
     totalWeightGrams: (state) => {
