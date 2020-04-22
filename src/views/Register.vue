@@ -223,7 +223,8 @@ export default {
             v => !!v || 'Phone number is required'
         ],
         orgNumberRules: [
-            v => !!v || 'Organisation number is required'
+            v => !!v || 'Organisation number is required',
+            v => v.length==9 || 'Organisation number must be 9 digits'
         ],
         emailRules: [
             v => !!v || 'Email address is required',
