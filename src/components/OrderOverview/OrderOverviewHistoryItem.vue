@@ -1,24 +1,24 @@
 <template>
     <v-expansion-panel>
-        <v-expansion-panel-header v-slot="{ open }">
-            <v-fade-transition>
+        <v-expansion-panel-header v-slot="{ open }" style="background:#EEFAF6;">
+            <v-fade-transition leave-absolute>
                 <v-row v-if="open">
                     <v-col cols="3">
-                        Order date: {{orderDate.getDate()+'/'+orderDate.getMonth()+'/'+orderDate.getYear()}}
+                        <p class="inline">Order date: </p>{{orderDate.getDate()+'/'+orderDate.getMonth()+'/'+orderDate.getYear()}}
                     </v-col>
 
                     <v-col cols="3">
-                        Order number: {{orderId}}
+                        <p class="inline">Order number: </p>{{orderId}}
                     </v-col>
                 </v-row>
             
-                <v-row v-else>
+                <v-row>
                     <v-col cols="3">
-                        Order date: {{orderDate.getDate()+'/'+orderDate.getMonth()+'/'+orderDate.getYear()}}
+                        <p class="inline">Order date: </p>{{orderDate.getDate()+'/'+orderDate.getMonth()+'/'+orderDate.getYear()}}
                     </v-col>
 
                     <v-col cols="3">
-                        Order number: {{orderId}}
+                        <p class="inline">Order number: </p>{{orderId}}
                     </v-col>
 
                     <v-col cols="3">
@@ -31,9 +31,9 @@
                 </v-row>
             </v-fade-transition>
         </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        <v-expansion-panel-content color="59c8a5">
             <br>
-            <p>Products:</p>
+            <p class="primary-color">Products</p>
             <OrderOverviewHistoryItemCoffee
             v-for="(coffee, index) in coffees"
             :key="`coffee-${index}`"
@@ -46,26 +46,35 @@
             <br>
             <v-row>
                 <v-col cols="4">
-                    Delivery type: {{deliveryOption}}
+                    <p class="primary-color">Delivery type</p> {{deliveryOption}}
                 </v-col>
 
                 <v-col cols="4">
-                    Delivery date: {{deliveryDate.getDate()+'/'+deliveryDate.getMonth()+'/'+deliveryDate.getYear()}}
+                    <p class="primary-color">Delivery date </p>{{deliveryDate.getDate()+'/'+deliveryDate.getMonth()+'/'+deliveryDate.getYear()}}
                 </v-col>
 
                 <v-col cols="4">
-                    Status: {{status}}
+                    <p class="primary-color">Status </p>{{status}}
                 </v-col>
             </v-row>
             <br>
             <v-divider></v-divider>
             <br>
-            Additional info: {{info}}
+            <p class="inline primary-color">Additional info: </p>{{info}}
             <br><br>
             <v-divider></v-divider>
         </v-expansion-panel-content>
     </v-expansion-panel>
 </template>
+
+<style scoped>
+.inline{
+    display: inline;
+}
+.primary-color{
+    color: #59c8a5;
+}
+</style>
 
 <script>
 import OrderOverviewHistoryItemCoffee from '@/components/OrderOverview/OrderOverviewHistoryItemCoffee'

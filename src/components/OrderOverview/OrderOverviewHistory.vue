@@ -1,6 +1,6 @@
 <template>
     <v-card flat>
-        <v-expansion-panels focusable>
+        <v-expansion-panels>
             <OrderOverviewHistoryItem
             v-for="order in orders"
             :key="order.orderId"
