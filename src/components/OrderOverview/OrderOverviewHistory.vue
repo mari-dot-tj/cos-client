@@ -1,5 +1,8 @@
 <template>
     <v-card flat>
+        <v-card v-if="orders.length==0" flat>
+          <v-card-text>Order history is empty.</v-card-text>
+        </v-card>
         <v-expansion-panels>
             <OrderOverviewHistoryItem
             v-for="order in orders"
