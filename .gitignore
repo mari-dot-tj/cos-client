@@ -8,7 +8,6 @@ config.json
 client/Thumbs.db
 db.json
 *.log
-public/
 .deploy*/
 src/_drafts
 package-lock.json
@@ -35,7 +34,7 @@ pids
 lib-cov
 
 
-/client/dist
+dist
 
 # local env files
 .env.local

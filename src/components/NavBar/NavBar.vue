@@ -19,7 +19,7 @@
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn text>Log out</v-btn>
+        <v-btn text @click="logout">Log out</v-btn>
       </v-toolbar-items>
     </v-app-bar>
   </div>
@@ -34,6 +34,8 @@
 <script>
 import Vue from 'vue'
 import NavBarButton from './NavBarButton.vue'
+import customerService from '@/api/customer.api'
+import { mapActions, mapGetters } from 'vuex'
 
 export default Vue.extend({
     name: 'NavBar',
@@ -47,6 +49,24 @@ export default Vue.extend({
         {text: 'New order', link: '/new-order'},
         {text: 'My profile', link: '/my-profile'}
       ]
-    })
+    }),
+    computed: {
+      ...mapGetters('account', ['isLoggedIn'])
+    },
+    methods: {
+      ...mapActions('account', ['logout']),
+      logout(){
+        customerService.logout()
+          .then(response => {
+            if(response!==undefined && response.status == 200){
+              this.$store.dispatch('account/logout')
+              this.$router.push('/login')
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      },
+    }
 })
 </script>

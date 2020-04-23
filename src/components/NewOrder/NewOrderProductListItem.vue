@@ -15,7 +15,7 @@
             <v-select
             class="rowOnLine"
             :items="weightDropdown"
-            :label="allBags[0] == undefined ? weight : allBags[0].size"
+            :label="bags[0] == undefined ? weight : bags[0].size"
             single-line
             v-model="weight"
             ></v-select>
@@ -105,11 +105,11 @@ export default {
         }
     },
     computed: {
-      ...mapState('products', ['allBags']),
+      ...mapState('products', ['bags']),
       ...mapState('products', ['allGroundLevels'])
     },
     watch: {
-        allBags: function (newValue, oldValue){
+        bags: function (newValue, oldValue){
             this.weight=newValue[0].size
             newValue.map(bagObj => {
                 this.weightDropdown.push(bagObj.size)
@@ -141,16 +141,16 @@ export default {
             }else return false
         },
         getGramsOfWeight(weight){
-            let index = this.allBags.map(bagObj => {
+            let index = this.bags.map(bagObj => {
                 return bagObj.size
             }).indexOf(weight)
-            return this.allBags[index].grams
+            return this.bags[index].grams
         },
         findBagIdByWeight(weight){
-            let index = this.allBags.map(bagObj => {
+            let index = this.bags.map(bagObj => {
                 return bagObj.size
             }).indexOf(weight)
-            return this.allBags[index].bag_id
+            return this.bags[index].bag_id
         },
         findGroundLevelIdbyGroundLevel(groundLevel){
             let index = this.allGroundLevels.map(groundLevelObj => {

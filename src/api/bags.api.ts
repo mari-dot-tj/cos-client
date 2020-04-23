@@ -21,6 +21,17 @@ class BagService {
             })
     }
 
+    async getCustomerBags(): Promise<Array<bagObject>> { 
+        return httpClient.get(this.END_POINT+'/me')
+            .then(function (response) {
+                console.log(response)
+                return response.data
+            })
+            .catch((error) => {
+                console.warn(error)
+            })
+    }
+
 }
 const bagService = new BagService
 export default bagService

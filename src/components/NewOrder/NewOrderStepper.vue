@@ -64,6 +64,7 @@
                 text
                 color="primary" 
                 float
+                @click="dialog=true;cancelOrderDialog=true"
                 >
                 <v-icon left>mdi-close-circle</v-icon>
                 Cancel
@@ -91,7 +92,7 @@
         </v-stepper-items>
       </v-stepper>
     </template>
-    <v-card v-if="!checkIfOrderEmpty() && !httpRequestSent">
+    <v-card v-if="!cancelOrderDialog && !checkIfOrderEmpty() && !httpRequestSent">
         <v-card-title
           color="primary"
         >
@@ -122,7 +123,7 @@
           </v-btn>
         </v-card-actions>
       </v-card>
-      <v-card v-if="checkIfOrderEmpty() && !httpRequestSent">
+      <v-card v-if="!cancelOrderDialog && checkIfOrderEmpty() && !httpRequestSent">
         <v-card-title
           color="primary"
         >
@@ -195,6 +196,37 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+      <v-card v-if="cancelOrderDialog">
+        <v-card-title
+          color="primary"
+        >
+          Cancel order?
+        </v-card-title>
+
+        <v-card-text>
+          {{cancelOrderDialogText}}
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-btn
+            outlined
+            color="primary"
+            text
+            @click="dialog = false; cancelOrderDialog=false"
+          >
+            No
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            @click="dialog = false; cancelOrderDialog=false; cancelOrder()"
+          >
+            Yes
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-dialog>
 </template>
 
@@ -217,10 +249,12 @@ import { mapState } from 'vuex'
         dialog: false,
         httpPostSuccess: false,
         httpRequestSent: false,
+        cancelOrderDialog: false,
         submitDialogText: "Are you sure you want to submit the order?",
         emptyOrderDialogText: "You cannot submit an empty order. Add coffees to your order before you submit.",
         orderSuccessDialogText: "Your order was successfully registered!",
-        orderFailDialogText: "Something went wrong. Cound not register order"
+        orderFailDialogText: "Something went wrong. Cound not register order",
+        cancelOrderDialogText: "Are you sure you want to cancel the order?"
       }
     },
     methods: {
@@ -240,6 +274,10 @@ import { mapState } from 'vuex'
         }else{
           return false
         }
+      },
+      cancelOrder(){
+        this.$store.dispatch('order/cancelOrder')
+        this.$router.push('/order-overview')
       }
     },
     computed: {

@@ -2,41 +2,25 @@ import { Module } from 'vuex/types'
 import orderService from '@/api/orders.api'
 
 interface OrderItem{
-    item_id: number,
-    coffee_id: number,
-    coffee_name: String,
-    weight: String,
-    grams: number,
-    bag_id: number
-    ground_level: String,
-    ground_level_id: number,
-    amount: number,
+    item_id: number;
+    coffee_id: number;
+    coffee_name: string;
+    weight: string;
+    grams: number;
+    bag_id: number;
+    ground_level: string;
+    ground_level_id: number;
+    amount: number;
 }
 
-/*interface Order{
-  info: String,
-  delivery_date: Date,
-  production_date: Date,
-  customer_id: number,
-  status_id: number,
-  delivery_id: number,
-  ref_id: number,
-  items: [
-      {
-      coffee_id: number,
-      bag_id: number,
-      ground_level_id: number,
-      quantity: number
-      }
-    ]
-}*/
-
 interface OrderState{
-  items: Array<OrderItem>,
-  delivery_id: number,
+  itemId: number;
+  items: Array<OrderItem>;
+  delivery_id: number;
 }
 
 const state: OrderState = {
+    itemId: 1,
     items: [],
     delivery_id: 1,
 }
@@ -65,7 +49,7 @@ const module: Module<OrderState, {}> = {
       })
     },
     deleteItemFromOrder: (state, item_id) => {
-      let index = state.items.map (x => {
+      const index = state.items.map (x => {
         return x.item_id;
       }).indexOf(item_id);
       state.items.splice(index, 1);
@@ -80,6 +64,12 @@ const module: Module<OrderState, {}> = {
       }else{
         console.log("Item not found");
       }
+    },
+    resetItemId: (state) => {
+      state.itemId=1
+    },
+    incrementItemId: (state) => {
+      state.itemId++
     }
   },
   actions: {
@@ -93,6 +83,9 @@ const module: Module<OrderState, {}> = {
     removeProductFromOrder: ({state, commit}, item_id) => {
       commit('deleteItemFromOrder', item_id)
     },
+    incrementItemId: ({commit}) => {
+      commit('incrementItemId')
+    },
     changeItemAmount: ({state, commit}, {item_id, newAmount}) => {
       commit('replaceItemAmount', {item_id, newAmount})
     },
@@ -100,7 +93,7 @@ const module: Module<OrderState, {}> = {
       commit('setDeliveryId', delivery_id)
     },
     postOrder: ({state, commit}) => {
-      let orderItems = []
+      const orderItems = [] as any
       state.items.map(item => {
         orderItems.push([item.coffee_id, item.bag_id, item.ground_level_id, item.amount])
       })
@@ -108,13 +101,18 @@ const module: Module<OrderState, {}> = {
         orderService.postOrder(orderItems, state.delivery_id).then(response => {
           if(response==200){
             commit('deleteAllItemsFromOrder')
+            commit('resetItemId')
           }
           resolve(response)
         }, error => {
           reject(error)
         })
       })
-    }
+    },
+    cancelOrder: ({commit}) => {
+      commit('deleteAllItemsFromOrder')
+      commit('resetItemId')
+    },
   },
   getters: {
     totalWeightGrams: (state) => {
