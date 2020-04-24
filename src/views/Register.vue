@@ -224,7 +224,7 @@ export default {
         ],
         orgNumberRules: [
             v => !!v || 'Organisation number is required',
-            v => v.length==9 || 'Organisation number must be 9 digits'
+            v => v.toString().length==9 || 'Organisation number must be 9 digits'
         ],
         emailRules: [
             v => !!v || 'Email address is required',
