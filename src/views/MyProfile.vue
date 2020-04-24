@@ -7,11 +7,10 @@
         <v-container>
             <NavBar/>
             <v-card>
-                <v-card-title color="primary">
-                    <h2 class="mx-auto">My profile</h2>
-                </v-card-title>
                 <v-card-text>
                     <v-form class="myProfileForm">
+                        <h2 class="mx-auto" color="primary">My profile</h2>
+                        <br>
                         <v-row>
                             <v-col cols="6">
                                 <v-text-field
