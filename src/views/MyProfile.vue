@@ -7,11 +7,10 @@
         <v-container>
             <NavBar/>
             <v-card>
-                <v-card-title color="primary">
-                    <h2 class="mx-auto">My profile</h2>
-                </v-card-title>
                 <v-card-text>
                     <v-form class="myProfileForm">
+                        <h2 class="mx-auto" color="primary">My profile</h2>
+                        <br>
                         <v-row>
                             <v-col cols="6">
                                 <v-text-field
@@ -128,7 +127,7 @@
         </v-container>
     </template>
     <v-card v-if="formDialog">
-        <v-form class="myProfileForm" ref="form">
+        <v-form class="myProfileForm" ref="editForm">
             <h2>Edit information</h2>
             <v-row>
                 <v-col cols="6">
@@ -345,7 +344,7 @@ export default {
         ],
         orgNumberRules: [
             v => !!v || 'Organisation number is required',
-            v => v.length==9 || 'Organisation number must be 9 digits'
+            v => v.toString().length==9 || 'Organisation number must be 9 digits'
         ],
         emailRules: [
             v => !!v || 'Email address is required'
@@ -394,7 +393,7 @@ export default {
             this.newPasswordRep = ''
         },
         updateCustomerIfValid(){
-            if(this.$refs.form.validate()){
+            if(this.$refs.editForm.validate()){
                 customerService.updateCustomer({name: this.name, address: this.address , phone: this.phone, org_number: this.orgNumber, email: this.email, zip_code: this.zipCode, subscription: this.subscription})
                 .then(response => {
                     if(response!=undefined && response.status == 200){
