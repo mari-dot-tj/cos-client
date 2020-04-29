@@ -172,7 +172,7 @@
           </v-btn>
         </v-card-actions>
       </v-card>
-      <v-card v-if="httpRequestSent && !httpPostSuccess">
+      <v-card v-if="httpPostFailed">
         <v-card-title
           color="primary"
         >
@@ -190,7 +190,7 @@
           <v-btn
             outlined
             color="primary"
-            @click="dialog = false"
+            @click="dialog = false; httpPostFailed=false"
           >
             OK
           </v-btn>
@@ -227,6 +227,7 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+      <Loader/>
     </v-dialog>
 </template>
 
@@ -241,6 +242,7 @@ import NewOrderProductList from './NewOrderProductList.vue'
 import NewOrderOrderOverview from './NewOrderOrderOverview.vue'
 import NewOrderDelivery from './NewOrderDelivery.vue'
 import { mapState } from 'vuex'
+import Loader from '@/components/Loader'
 
   export default {
     data () {
@@ -249,6 +251,7 @@ import { mapState } from 'vuex'
         dialog: false,
         httpPostSuccess: false,
         httpRequestSent: false,
+        httpPostFailed: false,
         cancelOrderDialog: false,
         submitDialogText: "Are you sure you want to submit the order?",
         emptyOrderDialogText: "You cannot submit an empty order. Add coffees to your order before you submit.",
@@ -260,10 +263,16 @@ import { mapState } from 'vuex'
     methods: {
       submitOrder(){
         this.httpRequestSent = true
+        this.$store.dispatch('toggleLoader', true)
         this.$store.dispatch('order/postOrder')
-        .then(res => {
-          if(res==200){
+        .then(response => {
+          this.$store.dispatch('toggleLoader', false)
+          if(typeof response != 'undefined'){
+            if(response.status==200){
             this.httpPostSuccess=true
+          }else{
+            httpPostFailed = true
+          }
           }
           this.dialog = true
         })
@@ -286,7 +295,8 @@ import { mapState } from 'vuex'
     components: {
         NewOrderProductList,
         NewOrderOrderOverview,
-        NewOrderDelivery
+        NewOrderDelivery,
+        Loader
     },
   }
 </script>

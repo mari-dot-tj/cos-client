@@ -49,7 +49,7 @@ class OrderService {
         return httpClient.post(this.END_POINT, jsonObj)
         .then(function (response) {
             console.log("Post order request status: ",response.status)
-            return response.status
+            return response
         })
         .catch((error) => {
             console.warn(error)
