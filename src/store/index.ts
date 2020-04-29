@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import products from './modules/products'
 import order from './modules/order'
-import delivery from './modules/delivery'
 import account from './modules/account'
 import createPersistedState from 'vuex-persistedstate'
 
@@ -15,7 +13,7 @@ export default new Vuex.Store({
   },
   mutations: {
     setLoader: (state, boolean) => {
-      state.loader = boolean
+      (<any>state).loader = boolean
     },
   },
   actions: {
@@ -29,9 +27,7 @@ export default new Vuex.Store({
     }),
   ],
   modules: {
-    products: products,
     order: order,
-    delivery: delivery,
     account: account
   }
 })

@@ -32,27 +32,31 @@
 import { mapState } from 'vuex'
 import NewOrderProductListItem from './NewOrderProductListItem.vue'
 import NewOrderProductFields from './NewOrderProductFields.vue'
-import bagService from '@/api/bags.api'
+import coffeeService from '@/api/coffees.api'
 
 export default {
     name: 'NewOrderProductList',
     computed: {
-        ...mapState('products',['coffees']),
         ...mapState('order', ['itemId'])
     },
     data: () => ({
         itemIdCopy: 0,
         addedToOrderSnackBar: false,
-        addedToOrderSnackBarText: ""
+        addedToOrderSnackBarText: "",
+        coffees: []
     }),
     methods: {
         init(){
-            this.$store.dispatch('products/getCustomerCoffees')
+            coffeeService.getCustomerCoffees()
+            .then(coffees => {
+                if(typeof coffees != 'undefined'){
+                    this.coffees = coffees
+                }
+            })
+            .catch((error) => {
+                console.warn(error)
+            })
             this.itemIdCopy = this.itemId
-            setTimeout(()=>{
-                this.$store.dispatch('products/getCustomerBags')
-                this.$store.dispatch('products/getAllGroundLevels')
-            }, 500)
         },
         addToOrder: function(coffeeId, coffeeName, weight, grams, bagId, groundLevel, groundLevelId, amount){
             let text = "Failed to add to order."

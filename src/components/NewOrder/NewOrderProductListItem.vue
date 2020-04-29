@@ -77,6 +77,8 @@
 <script>
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import bagService from '@/api/bags.api'
+import groundLevelService from '@/api/groundLevels.api'
 
 export default {
     name: 'NewOrderProductListItem',
@@ -97,16 +99,14 @@ export default {
             grams: 0,
             groundLevel: "",
             amount: 0,
+            bags: [],
+            allGroundLevels: [],
             weightDropdown: [],
             groundLevelDropdown: [],
             amountFieldRules: [
                 v => v>0 || 'Amount must be over 0!'
             ]
         }
-    },
-    computed: {
-      ...mapState('products', ['bags']),
-      ...mapState('products', ['allGroundLevels'])
     },
     watch: {
         bags: function (newValue, oldValue){
@@ -123,6 +123,27 @@ export default {
         }
     },
     methods: {
+        init(){
+            bagService.getCustomerBags()
+            .then(bags => {
+                if(typeof bags != 'undefined'){
+                    this.bags = bags
+                }
+            })
+            .catch((error) => {
+                console.warn(error)
+            })
+
+            groundLevelService.getAllGroundLevels()
+            .then(groundLevels => {
+                if(typeof groundLevels != 'undefined'){
+                    this.allGroundLevels = groundLevels
+                }
+            })
+            .catch((error) => {
+                console.warn(error)
+            })
+        },
         incrementAmount(){
             this.amount++;
         },
@@ -158,6 +179,9 @@ export default {
             }).indexOf(groundLevel)
             return this.allGroundLevels[index].ground_level_id
         }
+    },
+    mounted(){
+        this.init()
     }
 }
 </script>

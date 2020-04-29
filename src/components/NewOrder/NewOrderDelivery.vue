@@ -5,7 +5,7 @@
         v-model="chosenDeliveryOption"
         required>
             <v-radio 
-            v-for="deliveryOption in allDeliveryOptions"
+            v-for="deliveryOption in deliveryOptions"
             :label="deliveryOption.delivery_option"
             :key="deliveryOption.delivery_id"
             :value="deliveryOption.delivery_id"
@@ -26,6 +26,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import deliveryService from '@/api/delivery.api'
 
 export default {
     name: 'NewOrderDelivery',
@@ -38,16 +39,22 @@ export default {
         postUpTo10kgPrice: 149,
         postUpTo25kgPrice: 269,
         postUpTo35kgPrice: 389,
-        failedToLoad: 'Waiting for server...',
         chosenDeliveryOption: 1
     }),
     computed: {
-        ...mapState('delivery', ['allDeliveryOptions']),
         ...mapGetters('order', ['totalWeightGrams'])
     },
     methods: {
         init(){
-            this.$store.dispatch('delivery/getAllDeliveryOptions')
+            deliveryService.getAllDeliveryOptions()
+            .then(deliveryOptions => {
+                if(typeof deliveryOptions != 'undefined'){
+                    this.deliveryOptions = deliveryOptions
+                }
+            })
+            .catch((error) => {
+                console.warn(error)
+            })
         },
         setDeliveyOptions(){
             this.allDeliveryOptions.map(deliveyOption => {

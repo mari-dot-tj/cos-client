@@ -44,7 +44,6 @@ export default {
     },
     methods: {
         init(){
-            
             orderService.getOrders()
             .then((response) => {
                 if(typeof response != 'undefined'){

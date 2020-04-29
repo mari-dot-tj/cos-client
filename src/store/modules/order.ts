@@ -99,9 +99,11 @@ const module: Module<OrderState, {}> = {
       })
       return new Promise((resolve, reject) => {
         orderService.postOrder(orderItems, state.delivery_id).then(response => {
-          if(response==200){
-            commit('deleteAllItemsFromOrder')
-            commit('resetItemId')
+          if(typeof response != 'undefined'){
+            if(response.status==200){
+              commit('deleteAllItemsFromOrder')
+              commit('resetItemId')
+            }
           }
           resolve(response)
         }, error => {
