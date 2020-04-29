@@ -110,6 +110,7 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+      <Loader/>
     </v-dialog>
 </template>
 
@@ -127,6 +128,7 @@
 import Vue from 'vue'
 import { mapState, mapActions } from 'vuex'
 import customerService from '@/api/customer.api'
+import Loader from '@/components/Loader'
 
 export default Vue.extend({
     name: 'Login',
@@ -149,26 +151,33 @@ export default Vue.extend({
         ...mapActions('account', ['login']),
         loginIfValid(){
             if(this.$refs.form.validate()){
+                this.$store.dispatch('toggleLoader', true)
                 customerService.login(this.username, this.password)
                 .then(response => {
                   if(response!==undefined && response.status == 200){
                     const token = response.data.token
                     const user = response.data.customer
                     this.login({token, user})
-
+                    
+                    this.$store.dispatch('toggleLoader', false)
                     this.failedLoginDialog = false
                     this.$router.push('/order-overview')
                   }else{
+                    this.$store.dispatch('toggleLoader', false)
                     this.failedLoginDialog=true
                   } 
                 })
                 .catch((error) => {
+                  this.$store.dispatch('toggleLoader', false)
                   this.failedLoginDialog=true
                 })
           }else{
               this.notValidFormDialog=true
           }
         }
+    },
+    components: {
+      Loader
     }
 })
 </script>

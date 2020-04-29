@@ -11,10 +11,17 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   strict: true,
   state: {
+    loader: false
   },
   mutations: {
+    setLoader: (state, boolean) => {
+      state.loader = boolean
+    },
   },
   actions: {
+    toggleLoader: ({commit}, boolean) => {
+      commit('setLoader', boolean)
+    }
   },
   plugins: [
     createPersistedState({

@@ -269,7 +269,7 @@
     </v-card>
     <v-card v-if="logoutAllDialog">
         <v-card-title>Log out of all devices</v-card-title>
-        <v-card-text>Are you sure you want to log out of all devices?</v-card-text>
+        <v-card-text>Are you sure you want to log out of all devices, including this one?</v-card-text>
         <v-card-actions>
             <v-btn 
             outlined

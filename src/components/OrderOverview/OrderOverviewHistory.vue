@@ -1,23 +1,30 @@
 <template>
     <v-card flat>
-        <v-card v-if="orders.length==0" flat>
-          <v-card-text>Order history is empty.</v-card-text>
+            <v-card v-if="orderEmpty" flat>
+            <v-card-text>Order history is empty.</v-card-text>
+            </v-card>
+            <v-skeleton-loader
+            :loading="orders.length==0 && !orderEmpty"
+            transition="fade-transition"
+            height="94"
+            type="list-item"
+            >
+            <v-expansion-panels>
+                <OrderOverviewHistoryItem
+                v-for="order in orders"
+                :key="order.orderId"
+                :orderId="order.orderId"
+                :orderDate="order.orderDate"
+                :productionDate="order.productionDate"
+                :deliveryDate="order.deliveryDate"
+                :deliveryOption="order.deliveryOption"
+                :info="order.info"
+                :status="order.status"
+                :coffees="order.coffees"
+                />
+            </v-expansion-panels>
+            </v-skeleton-loader>
         </v-card>
-        <v-expansion-panels>
-            <OrderOverviewHistoryItem
-            v-for="order in orders"
-            :key="order.orderId"
-            :orderId="order.orderId"
-            :orderDate="order.orderDate"
-            :productionDate="order.productionDate"
-            :deliveryDate="order.deliveryDate"
-            :deliveryOption="order.deliveryOption"
-            :info="order.info"
-            :status="order.status"
-            :coffees="order.coffees"
-            />
-        </v-expansion-panels>
-    </v-card>
 </template>
 
 <script>
@@ -28,7 +35,8 @@ export default {
     name: 'OrderOverviewHistory',
     data(){
         return{
-            orders: []
+            orders: [],
+            orderEmpty: false
         }
     },
     components: {
@@ -53,7 +61,7 @@ export default {
                                 status: coffeeOrderObj.status_name,
                                 coffees: []
                                 })
-                            }
+                        }
                     })
                     /* Adds coffees to list order object in orders if orderId matches*/
                     for(let i=0; i<this.orders.length; i++){
@@ -74,6 +82,11 @@ export default {
                         var dateB = new Date(b.orderDate);
                         return dateB - dateA;
                     })
+
+                    /* Sets boolean for v-card v-if orderEmpty if the no orders are received */
+                    if(this.orders.length==0){
+                        this.orderEmpty = true
+                    }
 
                     console.log('ordreliste: ',this.orders)
                 }
