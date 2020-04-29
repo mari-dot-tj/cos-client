@@ -4,7 +4,7 @@
             <v-fade-transition>
                 <v-row v-if="open">
                     <v-col cols="3">
-                        <p class="inline">Order date: </p>{{orderDate.getDate()+'/'+orderDate.getMonth()+'/'+orderDate.getYear()}}
+                        <p class="inline">Order date: </p>{{orderDate.getDate()+'/'+orderDate.getMonth()+'/'+orderDate.getFullYear()}}
                     </v-col>
 
                     <v-col cols="3">
@@ -14,7 +14,7 @@
                 
                 <v-row v-else>
                     <v-col cols="3">
-                        <p class="inline">Order date: </p>{{orderDate.getDate()+'/'+orderDate.getMonth()+'/'+orderDate.getYear()}}
+                        <p class="inline">Order date: </p>{{orderDate.getDate()+'/'+orderDate.getMonth()+'/'+orderDate.getFullYear()}}
                     </v-col>
 
                     <v-col cols="3">
@@ -22,7 +22,7 @@
                     </v-col>
 
                     <v-col cols="3">
-                        Delivery date: {{deliveryDate.getDate()+'/'+deliveryDate.getMonth()+'/'+deliveryDate.getYear()}}
+                        Delivery date: {{deliveryDate.getDate()+'/'+deliveryDate.getMonth()+'/'+deliveryDate.getFullYear()}}
                     </v-col>
 
                     <v-col cols="3">
@@ -50,7 +50,7 @@
                 </v-col>
 
                 <v-col cols="4">
-                    <p class="primary-color">Delivery date </p>{{deliveryDate.getDate()+'/'+deliveryDate.getMonth()+'/'+deliveryDate.getYear()}}
+                    <p class="primary-color">Delivery date </p>{{deliveryDate.getDate()+'/'+deliveryDate.getMonth()+'/'+deliveryDate.getFullYear()}}
                 </v-col>
 
                 <v-col cols="4">
