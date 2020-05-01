@@ -9,7 +9,9 @@
         :coffeeName="coffee.name"
         :weightDropdown="weightDropdown"
         :groundLevelDropdown="groundLevelDropdown"/>
-        <v-snackbar v-model="addedToOrderSnackBar">
+        <v-snackbar 
+        v-model="addedToOrderSnackBar"
+        :timeout=1000>
             {{ addedToOrderSnackBarText }}
             <v-btn
                 color="primary"
@@ -100,7 +102,7 @@ export default {
             const ground_level_id = this.findGroundLevelIdbyGroundLevel(groundLevel)
 
             if(this.$store.dispatch('order/addProductToOrder', {item_id: this.itemIdCopy, coffee_id: coffeeId, coffee_name: coffeeName, weight, grams, bag_id, ground_level: groundLevel, ground_level_id, amount})){
-                text = "Added to order! Name: " + coffeeName + " , weight "+ weight + " , ground level: "+ groundLevel + ", amount: " + amount
+                text = "Added " + coffeeName + " to order!"
             }else{
                 text = "Failed to add to order"
             }

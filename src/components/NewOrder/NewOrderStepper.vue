@@ -21,7 +21,8 @@
         <v-stepper-items>
           <v-stepper-content step="1">
             <v-card
-              class="mb-12 scroll"
+              flat
+              class="scroll"
               height="400px"
             >
             <NewOrderProductList/>
@@ -30,7 +31,8 @@
 
           <v-stepper-content step="2">
             <v-card
-              class="mb-12 scroll"
+              flat
+              class="scroll"
               height="400px"
             >
             <NewOrderOrderOverview/>
@@ -39,31 +41,30 @@
 
           <v-stepper-content step="3">
             <v-card
-              class="mb-12 scroll"
+              flat
+              class="scroll"
               height="400px"
             >
             <NewOrderDelivery/>
             </v-card>
-        
           </v-stepper-content>
-          <v-bottom-navigation
-            grow
-            absolute
-            active-class='no-active'
-            >
-          <v-btn
+            <v-card
+            grow>
+            <v-card-actions class="justify-center stepperButton">
+              <v-btn
               v-if="e1 == 2 || e1 == 3"
               color="primary"
-              text
+              outlined
+              left
+              absolute
               @click="e1 <=1? e1=1 : e1-=1"
             >
             <v-icon left>mdi-arrow-left-bold</v-icon>
             <span>Previous</span>
             </v-btn>
             <v-btn
-                text
+                outlined
                 color="primary" 
-                float
                 @click="dialog=true;cancelOrderDialog=true"
                 >
                 <v-icon left>mdi-close-circle</v-icon>
@@ -72,7 +73,8 @@
           <v-btn
               v-if="e1 == 1 || e1 == 2"
               color="primary"
-              text
+              right
+              absolute
               @click="e1 == 3 ? e1=1 : e1+=1"
             >
             <v-icon left>mdi-arrow-right-bold</v-icon>
@@ -81,14 +83,15 @@
             <v-btn
               v-if="e1 == 3"
               color="primary"
-              text
+              right
+              absolute
               v-on="on"
             >
-            <v-icon left>mdi-arrow-right-bold</v-icon>
+            <v-icon left>mdi-send</v-icon>
               Submit order
             </v-btn>
-            </v-bottom-navigation>
-            
+            </v-card-actions>
+            </v-card>
         </v-stepper-items>
       </v-stepper>
     </template>
@@ -234,6 +237,10 @@
 <style scoped>
   .scroll {
     overflow: auto;
+  }
+  .stepperButton {
+    padding-top: 15px;
+    padding-bottom: 15px;
   }
 </style>
 
