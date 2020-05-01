@@ -7,6 +7,7 @@
         :key="coffee.coffee_id"
         :coffeeId="coffee.coffee_id"
         :coffeeName="coffee.name"
+        :coffeeDescription="coffee.description"
         :weightDropdown="weightDropdown"
         :groundLevelDropdown="groundLevelDropdown"/>
         <v-snackbar 

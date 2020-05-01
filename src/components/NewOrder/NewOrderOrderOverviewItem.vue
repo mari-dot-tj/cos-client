@@ -27,14 +27,20 @@
             </span>
         </v-col>
         <v-col cols="4">
-            <v-btn 
-            class="rowOnLine"
-            absolute
-            right
-            outlined color="primary"
-            @click="removeFromOrder(itemId) & $emit('removed-from-order')">
-                Remove
-            </v-btn>
+            <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                    <v-btn 
+                    class="rowOnLine"
+                    absolute
+                    right
+                    outlined color="primary"
+                    v-on="on"
+                    @click="removeFromOrder(itemId) & $emit('removed-from-order')">
+                        <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                </template>
+                <span>Remove item</span>
+            </v-tooltip>
         </v-col>
     </v-row>
     <v-divider></v-divider>

@@ -6,10 +6,24 @@
       type="text"
     >
     <v-row>
-        <v-col :cols="$vuetify.breakpoint.lgAndUp ? 4 : 3" class="coffee">
-            <span class="coffee">
-                {{coffeeName}}
-            </span>
+        <v-col :cols="$vuetify.breakpoint.lgAndUp ? 4 : 3">
+            <v-tooltip 
+            right
+            color="#ffffff">
+                <template v-slot:activator="{ on }">
+                    <v-icon
+                    v-on="on"
+                    class="icon"
+                    color="primary">mdi-information-outline</v-icon>
+                    <span class="coffee">
+                        {{coffeeName}}
+                    </span>
+                </template>
+                <v-card width="250px">
+                    <v-card-title id="description-title">Description</v-card-title>
+                    <v-card-text>{{coffeeDescription}}</v-card-text>
+                </v-card>
+            </v-tooltip>
         </v-col>
         <v-col cols="2">
             <v-select
@@ -70,8 +84,15 @@
     padding-right: 0px;
 }
 .coffee {
-    margin-bottom: 0px;
-    padding-bottom: 0px;
+    margin-top: 8px;
+}
+
+.icon {
+    margin-top: 0px;
+}
+
+#description-title {
+    color: #59c8a5;
 }
 </style>
 
@@ -91,6 +112,9 @@ export default {
         coffeeId: {
             type: Number,
             required: true
+        },
+        coffeeDescription: {
+            type: String
         },
         weightDropdown: {
             type: Array
