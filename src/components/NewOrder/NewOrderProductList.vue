@@ -7,7 +7,8 @@
         :key="coffee.coffee_id"
         :coffeeId="coffee.coffee_id"
         :coffeeName="coffee.name"
-        />
+        :weightDropdown="weightDropdown"
+        :groundLevelDropdown="groundLevelDropdown"/>
         <v-snackbar v-model="addedToOrderSnackBar">
             {{ addedToOrderSnackBarText }}
             <v-btn
@@ -15,8 +16,8 @@
                 text
                 @click="addedToOrderSnackBar = false"
             >
-        Close
-      </v-btn>
+                Close
+            </v-btn>
         </v-snackbar>
     </v-container>
 </template>
@@ -33,6 +34,8 @@ import { mapState } from 'vuex'
 import NewOrderProductListItem from './NewOrderProductListItem.vue'
 import NewOrderProductFields from './NewOrderProductFields.vue'
 import coffeeService from '@/api/coffees.api'
+import bagService from '@/api/bags.api'
+import groundLevelService from '@/api/groundLevels.api'
 
 export default {
     name: 'NewOrderProductList',
@@ -43,7 +46,11 @@ export default {
         itemIdCopy: 0,
         addedToOrderSnackBar: false,
         addedToOrderSnackBarText: "",
-        coffees: []
+        coffees: [],
+        bags: [],
+        allGroundLevels: [],
+        weightDropdown: [],
+        groundLevelDropdown: [],
     }),
     methods: {
         init(){
@@ -56,11 +63,43 @@ export default {
             .catch((error) => {
                 console.warn(error)
             })
+
+            bagService.getCustomerBags()
+            .then(bags => {
+                    if(typeof bags != 'undefined'){
+                        this.bags = bags
+                        this.bags.map(bagObj => {
+                        this.weightDropdown.push(bagObj.size)
+                    })
+                }
+            })
+            .catch((error) => {
+                console.warn(error)
+            })
+
+            groundLevelService.getAllGroundLevels()
+            .then(groundLevels => {
+                    if(typeof groundLevels != 'undefined'){
+                        this.allGroundLevels = groundLevels
+                        this.allGroundLevels.map(groundLevelObj => {
+                        this.groundLevelDropdown.push(groundLevelObj.level_name)
+                    })
+                }
+            })
+            .catch((error) => {
+                console.warn(error)
+            })
+
             this.itemIdCopy = this.itemId
         },
-        addToOrder: function(coffeeId, coffeeName, weight, grams, bagId, groundLevel, groundLevelId, amount){
+        addToOrder: function(coffeeId, coffeeName, weight, groundLevel, amount){
             let text = "Failed to add to order."
-            if(this.$store.dispatch('order/addProductToOrder', {item_id: this.itemIdCopy, coffee_id: coffeeId, coffee_name: coffeeName, weight, grams, bag_id: bagId, ground_level: groundLevel, ground_level_id: groundLevelId, amount})){
+
+            let grams = this.getGramsOfWeight(weight)
+            let bag_id = this.findBagIdByWeight(weight)
+            let ground_level_id = this.findGroundLevelIdbyGroundLevel(groundLevel)
+
+            if(this.$store.dispatch('order/addProductToOrder', {item_id: this.itemIdCopy, coffee_id: coffeeId, coffee_name: coffeeName, weight, grams, bag_id, ground_level: groundLevel, ground_level_id, amount})){
                 text = "Added to order! Name: " + coffeeName + " , weight "+ weight + " , ground level: "+ groundLevel + ", amount: " + amount
             }else{
                 text = "Failed to add to order"
@@ -70,10 +109,28 @@ export default {
 
             this.$store.dispatch('order/incrementItemId')
             this.itemIdCopy = this.itemId
+        },
+        getGramsOfWeight(weight){
+            let index = this.bags.map(bagObj => {
+                return bagObj.size
+            }).indexOf(weight)
+            return this.bags[index].grams
+        },
+        findBagIdByWeight(weight){
+            let index = this.bags.map(bagObj => {
+                return bagObj.size
+            }).indexOf(weight)
+            return this.bags[index].bag_id
+        },
+        findGroundLevelIdbyGroundLevel(groundLevel){
+            let index = this.allGroundLevels.map(groundLevelObj => {
+                return groundLevelObj.level_name
+            }).indexOf(groundLevel)
+            return this.allGroundLevels[index].ground_level_id
         }
     },
     mounted() {
-        this.init();
+        this.init()
     },
     components: {
         NewOrderProductFields,

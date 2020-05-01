@@ -1,6 +1,6 @@
 <template>
 <v-skeleton-loader
-      :loading="groundLevelDropdown.length == 0 || weightDropdown.length == 0"
+      :loading="groundLevelDropdown == undefined || weightDropdown == undefined"
       transition="fade-transition"
       height="94"
       type="text"
@@ -13,19 +13,25 @@
         </v-col>
         <v-col cols="2">
             <v-select
+            ref="weightSelect"
             class="rowOnLine"
             :items="weightDropdown"
-            :label="bags[0] == undefined ? weight : bags[0].size"
+            :label="selectLabel"
             single-line
+            :error-messages="weightError"
+            v-on:change="weightError=''"
             v-model="weight"
             ></v-select>
         </v-col>
         <v-col cols="2">
             <v-select
+            ref="groundLevelSelect"
             class="rowOnLine"
             :items="groundLevelDropdown"
-            :label="allGroundLevels[0] == undefined ? groundLevel : allGroundLevels[0].level_name"
+            :label="selectLabel"
             single-line
+            :error-messages="groundLevelError"
+            v-on:change="groundLevelError=''"
             v-model="groundLevel"
             ></v-select>
         </v-col>
@@ -55,7 +61,7 @@
             <v-btn 
             outlined color="primary" 
             class="rowOnLine" 
-            @click="checkIfValid() ? $emit('add-to-order', coffeeId, coffeeName, weight, getGramsOfWeight(weight), findBagIdByWeight(weight), groundLevel, findGroundLevelIdbyGroundLevel(groundLevel) , amount) & resetFields() : valid=false">
+            @click="checkIfValid() ? $emit('add-to-order', coffeeId, coffeeName, weight, groundLevel, amount) & resetFields() : valid=false">
                 Add to order
             </v-btn>
         </v-col>
@@ -90,60 +96,30 @@ export default {
         coffeeId: {
             type: Number,
             required: true
+        },
+        weightDropdown: {
+            type: Array
+        },
+        groundLevelDropdown: {
+            type: Array
         }
     },
     data: function (){
         return{
             valid: true,
-            weight: "",
+            weight: '',
             grams: 0,
-            groundLevel: "",
+            groundLevel: '',
             amount: 0,
-            bags: [],
-            allGroundLevels: [],
-            weightDropdown: [],
-            groundLevelDropdown: [],
             amountFieldRules: [
                 v => v>0 || 'Amount must be over 0!'
-            ]
-        }
-    },
-    watch: {
-        bags: function (newValue, oldValue){
-            this.weight=newValue[0].size
-            newValue.map(bagObj => {
-                this.weightDropdown.push(bagObj.size)
-            })
-        },
-        allGroundLevels: function(newValue, oldValue){
-            this.groundLevel=newValue[0].level_name
-            newValue.map(groundLevelObj => {
-                this.groundLevelDropdown.push(groundLevelObj.level_name)
-            })
+            ],
+            selectLabel: '--Select option--',
+            weightError: '',
+            groundLevelError: ''
         }
     },
     methods: {
-        init(){
-            bagService.getCustomerBags()
-            .then(bags => {
-                if(typeof bags != 'undefined'){
-                    this.bags = bags
-                }
-            })
-            .catch((error) => {
-                console.warn(error)
-            })
-
-            groundLevelService.getAllGroundLevels()
-            .then(groundLevels => {
-                if(typeof groundLevels != 'undefined'){
-                    this.allGroundLevels = groundLevels
-                }
-            })
-            .catch((error) => {
-                console.warn(error)
-            })
-        },
         incrementAmount(){
             this.amount++;
         },
@@ -151,37 +127,28 @@ export default {
             this.amount == 0 ? this.amount = 0 : this.amount--;
         },
         resetFields(){
-            this.weight = this.weightDropdown[0]
-            this.groundLevel = this.groundLevelDropdown[0]
+            this.$refs.weightSelect.reset()
+            this.$refs.groundLevelSelect.reset()
             this.amount = 0
+            this.weight = ''
+            this.groundLevel = ''
             this.$refs.amountField.resetValidation()
+            this.weightError=''
+            this.groundLevelError=''
         },
         checkIfValid(){
-            if((this.$refs.amountField).validate()){
+            if((this.$refs.amountField).validate() && this.weight!='' && this.groundLevel!=''){
                 return true
-            }else return false
+            }else{
+                if(this.weight==''){
+                    this.weightError="Select weight berfore adding to order."
+                }
+                if(this.groundLevel==''){
+                    this.groundLevelError="Select ground level berfore adding to order."
+                }
+                return false
+            }
         },
-        getGramsOfWeight(weight){
-            let index = this.bags.map(bagObj => {
-                return bagObj.size
-            }).indexOf(weight)
-            return this.bags[index].grams
-        },
-        findBagIdByWeight(weight){
-            let index = this.bags.map(bagObj => {
-                return bagObj.size
-            }).indexOf(weight)
-            return this.bags[index].bag_id
-        },
-        findGroundLevelIdbyGroundLevel(groundLevel){
-            let index = this.allGroundLevels.map(groundLevelObj => {
-                return groundLevelObj.level_name
-            }).indexOf(groundLevel)
-            return this.allGroundLevels[index].ground_level_id
-        }
-    },
-    mounted(){
-        this.init()
     }
 }
 </script>
