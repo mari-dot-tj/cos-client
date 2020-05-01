@@ -219,7 +219,7 @@
             <v-btn
             color="primary"
             class="mr-4"
-            @click="updateCustomerIfValid(); formDialog=false; dialog=false">
+            @click="updateCustomerIfValid(); formDialog=false">
                 Save
             </v-btn>
         </v-form>
@@ -299,6 +299,20 @@
             </v-btn>
         </v-card-actions>
     </v-card>
+    <v-card v-if="updateCustomerDialog">
+        <v-card-title>
+            {{updateCustomerFeedbackTitle}}
+        </v-card-title>
+        <v-card-text>{{updateCustomerFeedbackMsg}}</v-card-text>
+        <v-card-actions>
+            <v-btn
+            right
+            color="primary"
+            @click="updateCustomerDialog=false; dialog=false">
+                Ok
+            </v-btn>
+        </v-card-actions>
+    </v-card>
     </v-dialog>
 </template>
 
@@ -364,7 +378,10 @@ export default {
         formDialog: false,
         logoutAllDialog: false,
         changePasswordDialog: false,
-        changePasswordFeedbackDialog: false
+        changePasswordFeedbackDialog: false,
+        updateCustomerDialog: false,
+        updateCustomerFeedbackMsg: '',
+        updateCustomerFeedbackTitle: ''
     }),
     methods: {
         init(){
@@ -394,18 +411,29 @@ export default {
         },
         updateCustomerIfValid(){
             if(this.$refs.editForm.validate()){
+                this.$store.dispatch('toggleLoader', true)
                 customerService.updateCustomer({name: this.name, address: this.address , phone: this.phone, org_number: this.orgNumber, email: this.email, zip_code: this.zipCode, subscription: this.subscription})
                 .then(response => {
-                    if(response!=undefined && response.status == 200){
+                    this.$store.dispatch('toggleLoader', false)
+                    if(typeof response != 'undefined' && response.status == 200){
                         const newUserInfo = {name: this.name, address: this.address , phone: this.phone, org_number: this.orgNumber, email: this.email, zip_code: this.zipCode, subscription: this.subscription}
                         this.$store.dispatch('account/updateUser', newUserInfo)
+                        this.updateCustomerFeedbackMsg = "Your account information was successfully updated"
+                        this.updateCustomerFeedbackTitle = "Successfully updated!"
+                        this.updateCustomerDialog = true
+                    }else{
+                        this.updateCustomerFeedbackMsg = "Unable to change profile information. Try again."
+                        this.updateCustomerFeedbackTitle = "Error"
+                        this.updateCustomerDialog = true
                     }
                 })
                 .catch(error => {
                     console.log(error)
                 })
             }else{
-                console.log('not valid form')
+                this.updateCustomerFeedbackMsg = "Make sure the fields are filled in correctly"
+                this.updateCustomerFeedbackTitle = "Form not valid"
+                this.updateCustomerDialog = true
             }
         },
         updatePasswordIfValid(){
@@ -415,9 +443,11 @@ export default {
                     this.passwordChangeFeedbackMsg = 'New password repetiotion does not match. Try again.'
                     this.changePasswordFeedbackDialog=true
                 }else{
+                this.$store.dispatch('toggleLoader', true)
                 customerService.updatePassword(this.oldPassword, this.newPassword)
                 .then(response => {
-                    if(response!=undefined && response.status == 200){
+                    this.$store.dispatch('toggleLoader', false)
+                    if(typeof response != 'undefined' && response.status == 200){
                         this.passwordChangeFeedbackTitle = 'Success'
                         this.passwordChangeFeedbackMsg = 'Password successfully changed.'
                         this.changePasswordFeedbackDialog=true
@@ -440,8 +470,10 @@ export default {
             }
         },
         logoutAll(){
+            this.$store.dispatch('toggleLoader', true)
             customerService.logoutAll()
             .then(response => {
+                this.$store.dispatch('toggleLoader', false)
                 console.log(response)
                 if(response.status==200){
                     this.$router.push('/login')
