@@ -95,9 +95,9 @@ export default {
         addToOrder: function(coffeeId, coffeeName, weight, groundLevel, amount){
             let text = "Failed to add to order."
 
-            let grams = this.getGramsOfWeight(weight)
-            let bag_id = this.findBagIdByWeight(weight)
-            let ground_level_id = this.findGroundLevelIdbyGroundLevel(groundLevel)
+            const grams = this.getGramsOfWeight(weight)
+            const bag_id = this.findBagIdByWeight(weight)
+            const ground_level_id = this.findGroundLevelIdbyGroundLevel(groundLevel)
 
             if(this.$store.dispatch('order/addProductToOrder', {item_id: this.itemIdCopy, coffee_id: coffeeId, coffee_name: coffeeName, weight, grams, bag_id, ground_level: groundLevel, ground_level_id, amount})){
                 text = "Added to order! Name: " + coffeeName + " , weight "+ weight + " , ground level: "+ groundLevel + ", amount: " + amount
@@ -111,19 +111,19 @@ export default {
             this.itemIdCopy = this.itemId
         },
         getGramsOfWeight(weight){
-            let index = this.bags.map(bagObj => {
+            const index = this.bags.map(bagObj => {
                 return bagObj.size
             }).indexOf(weight)
             return this.bags[index].grams
         },
         findBagIdByWeight(weight){
-            let index = this.bags.map(bagObj => {
+            const index = this.bags.map(bagObj => {
                 return bagObj.size
             }).indexOf(weight)
             return this.bags[index].bag_id
         },
         findGroundLevelIdbyGroundLevel(groundLevel){
-            let index = this.allGroundLevels.map(groundLevelObj => {
+            const index = this.allGroundLevels.map(groundLevelObj => {
                 return groundLevelObj.level_name
             }).indexOf(groundLevel)
             return this.allGroundLevels[index].ground_level_id
