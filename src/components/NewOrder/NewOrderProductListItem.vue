@@ -13,9 +13,8 @@
                 <template v-slot:activator="{ on }">
                     <v-icon
                     v-on="on"
-                    class="icon"
                     color="primary">mdi-information-outline</v-icon>
-                    <span class="coffee">
+                    <span>
                         {{coffeeName}}
                     </span>
                 </template>
@@ -82,13 +81,6 @@
 .withOutSidePadding {
     padding-left: 0px;
     padding-right: 0px;
-}
-.coffee {
-    margin-top: 8px;
-}
-
-.icon {
-    margin-top: 0px;
 }
 
 #description-title {

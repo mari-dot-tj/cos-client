@@ -19,7 +19,10 @@
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn text @click="logout">Log out</v-btn>
+        <v-btn text @click="logout">
+          <v-icon left>mdi-logout</v-icon>
+          Log out
+        </v-btn>
       </v-toolbar-items>
     </v-app-bar>
     <Loader/>
