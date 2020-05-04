@@ -78,10 +78,10 @@ const module: Module<AccountState, {}> = {
             // set auth header
             httpClient.defaults.headers.common['Authorization'] = `Bearer ${token}`
         },
-        logout: ({ commit }) => {
+        logout: ({ commit, dispatch }) => {
             console.log('logging out')
             commit('RESET')
-            commit('order/resetOrderInfo', null, { root: true })
+            dispatch('order/resetOrderType', null, { root: true })
             commit('order/resetOrderType', null, { root: true })
         },
         updateUser: ({ commit }, userinfo) => {
