@@ -17,12 +17,14 @@ interface OrderState{
   itemId: number;
   items: Array<OrderItem>;
   delivery_id: number;
+  orderType: String;
 }
 
 const state: OrderState = {
     itemId: 1,
     items: [],
     delivery_id: 1,
+    orderType: ''
 }
 
 const module: Module<OrderState, {}> = {
@@ -34,6 +36,9 @@ const module: Module<OrderState, {}> = {
     },
     setDeliveryId: (state, delivery_id) => {
       state.delivery_id = delivery_id
+    },
+    setOrderType: (state, orderType) => {
+      state.orderType = orderType
     },
     pushProductToOrder: (state, {item_id, coffee_id, coffee_name, weight, grams, bag_id, ground_level, ground_level_id, amount}) => {
       state.items.push({
@@ -68,6 +73,9 @@ const module: Module<OrderState, {}> = {
     resetItemId: (state) => {
       state.itemId=1
     },
+    resetOrderType: (state) => {
+      state.orderType = ''
+    },
     incrementItemId: (state) => {
       state.itemId++
     }
@@ -79,6 +87,9 @@ const module: Module<OrderState, {}> = {
         console.log(state.items)
         return true
       }else return false
+    },
+    changeOrderType: ({commit}, orderType) => {
+      commit('setOrderType', orderType)
     },
     removeProductFromOrder: ({state, commit}, item_id) => {
       commit('deleteItemFromOrder', item_id)
@@ -114,6 +125,7 @@ const module: Module<OrderState, {}> = {
     cancelOrder: ({commit}) => {
       commit('deleteAllItemsFromOrder')
       commit('resetItemId')
+      commit('resetOrderType')
     },
   },
   getters: {
