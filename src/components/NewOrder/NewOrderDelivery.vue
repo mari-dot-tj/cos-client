@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <h3 class="heading">Choose Delivery</h3>
+        <h3 class="heading">Delivery</h3>
         <v-radio-group
         v-model="chosenDeliveryOption"
         required>
@@ -15,6 +15,37 @@
         <div v-else-if="chosenDeliveryOption==2">Delivery price: {{pickUpPrice}} kr</div>
         <div v-else-if="chosenDeliveryOption==3">Delivery price: {{homeDeliveryPrice}} kr</div>
         <div v-else>Contact Jacobsen og Svart for delivery price.</div>
+        <div v-if="orderType=='recurringOrder'">
+            <br>
+            <v-row>
+                <v-col cols="6">
+                    <h3 class="heading">Interval</h3>
+                    <v-select
+                    ref="intervalSelect"
+                    color="primary"
+                    :items="intervalOptions"
+                    label="--Select interval--"
+                    single-line
+                    v-model="interval"
+                    :rules="intervalRules"
+                    v-on:change="resetIntervalValidation()"
+                    ></v-select>
+                </v-col>
+                <v-col cols="6">
+                    <h3 class="heading">Delivery day</h3>
+                    <v-select
+                    ref="dayOfWeekSelect"
+                    color="primary"
+                    :items="dayOfWeekOptions"
+                    label="--Select day of week--"
+                    single-line
+                    v-model="dayOfWeek"
+                    :rules="dayOfWeekRules"
+                    v-on:change="resetDayOfWeekValidation()"
+                    ></v-select>
+                </v-col>
+            </v-row>
+        </div>
     </v-container>
 </template>
 
@@ -39,10 +70,32 @@ export default {
         postUpTo10kgPrice: 149,
         postUpTo25kgPrice: 269,
         postUpTo35kgPrice: 389,
-        chosenDeliveryOption: 1
+        chosenDeliveryOption: 1,
+        dayOfWeekOptions: [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday'
+        ],
+        intervalOptions: [
+            'Every week',
+            'Every other week',
+            'Every third week',
+            'Every month'
+        ],
+        dayOfWeek: 0,
+        interval: 0,
+        intervalRules: [
+            v => (v == 'Every week' || v =='Every other week' || v =='Every third week' || v == 'Every month') || 'Select an interval'
+        ],
+        dayOfWeekRules: [
+            v => (v == 'Monday' || v == 'Tuesday' || v=='Wednesday' || v=='Thursday' || v=='Friday') || 'Select a delivery day'
+        ]
     }),
     computed: {
-        ...mapGetters('order', ['totalWeightGrams'])
+        ...mapGetters('order', ['totalWeightGrams']),
+        ...mapState('order', ['orderType'])
     },
     methods: {
         init(){
@@ -61,6 +114,12 @@ export default {
                 this.deliveyOptions.push(deliveyOption.delivery_option)
             })
         },
+        resetIntervalValidation(){
+            this.$refs.intervalSelect.resetValidation()
+        },
+        resetDayOfWeekValidation(){
+            this.$refs.dayOfWeekSelect.resetValidation()
+        },
         findDeliveryPrice(){
             if(this.totalWeightGrams.totalWeightGrams <= 2000){
                 this.postDeliveryPrice = this.postUpTo2kgPrice
@@ -75,8 +134,16 @@ export default {
         }
     },
     watch: {
-        chosenDeliveryOption: function(newValue, oldValue){
+        chosenDeliveryOption: function(newValue){
             this.$store.dispatch('order/chooseDelivery', newValue)
+        },
+        interval: function(newValue){
+            const newInterval = this.intervalOptions.indexOf(newValue)+1
+            this.$store.dispatch('order/changeInterval', newInterval)
+        },
+        dayOfWeek: function(newValue){
+            const newWeekDay = this.dayOfWeekOptions.indexOf(newValue)+1
+            this.$store.dispatch('order/changeDayOfWeek', newWeekDay)
         }
     },
     beforeMount(){

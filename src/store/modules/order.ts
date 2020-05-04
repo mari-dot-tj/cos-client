@@ -18,13 +18,17 @@ interface OrderState{
   items: Array<OrderItem>;
   delivery_id: number;
   orderType: String;
+  interval?: number;
+  dayOfWeek?: number;
 }
 
 const state: OrderState = {
     itemId: 1,
     items: [],
     delivery_id: 1,
-    orderType: ''
+    orderType: '',
+    interval: 0,
+    dayOfWeek: 0
 }
 
 const module: Module<OrderState, {}> = {
@@ -39,6 +43,12 @@ const module: Module<OrderState, {}> = {
     },
     setOrderType: (state, orderType) => {
       state.orderType = orderType
+    },
+    setInterval: (state, interval) => {
+      state.interval = interval
+    },
+    setDayOfWeek: (state, dayOfWeek) => {
+      state.dayOfWeek = dayOfWeek
     },
     pushProductToOrder: (state, {item_id, coffee_id, coffee_name, weight, grams, bag_id, ground_level, ground_level_id, amount}) => {
       state.items.push({
@@ -78,6 +88,12 @@ const module: Module<OrderState, {}> = {
     },
     incrementItemId: (state) => {
       state.itemId++
+    },
+    resetInterval: (state) => {
+      state.interval = 0
+    },
+    resetDayOfWeek: (state) => {
+      state.dayOfWeek = 0
     }
   },
   actions: {
@@ -91,42 +107,68 @@ const module: Module<OrderState, {}> = {
     changeOrderType: ({commit}, orderType) => {
       commit('setOrderType', orderType)
     },
-    removeProductFromOrder: ({state, commit}, item_id) => {
+    resetOrderType: ({commit}) => {
+      commit('resetOrderType')
+    },
+    changeInterval: ({commit}, interval) => {
+      commit('setInterval', interval)
+    },
+    changeDayOfWeek: ({commit}, dayOfWeek) => {
+      commit('setDayOfWeek', dayOfWeek)
+    },
+    removeProductFromOrder: ({commit}, item_id) => {
       commit('deleteItemFromOrder', item_id)
     },
     incrementItemId: ({commit}) => {
       commit('incrementItemId')
     },
-    changeItemAmount: ({state, commit}, {item_id, newAmount}) => {
+    changeItemAmount: ({commit}, {item_id, newAmount}) => {
       commit('replaceItemAmount', {item_id, newAmount})
     },
-    chooseDelivery: ({state, commit}, delivery_id) => {
+    chooseDelivery: ({commit}, delivery_id) => {
       commit('setDeliveryId', delivery_id)
     },
-    postOrder: ({state, commit}) => {
+    postOrder: ({state, commit, dispatch}) => {
       const orderItems = [] as any
       state.items.map(item => {
         orderItems.push([item.coffee_id, item.bag_id, item.ground_level_id, item.amount])
       })
       return new Promise((resolve, reject) => {
-        orderService.postOrder(orderItems, state.delivery_id).then(response => {
-          if(typeof response != 'undefined'){
-            if(response.status==200){
-              commit('deleteAllItemsFromOrder')
-              commit('resetItemId')
+        if(state.orderType=='recurringOrder'){
+          orderService.postOrder(orderItems, state.delivery_id, state.interval, state.dayOfWeek).then(response => {
+            if(typeof response != 'undefined'){
+              if(response.status==200){
+                dispatch('resetOrderInfo')
+              }
             }
-          }
-          resolve(response)
-        }, error => {
-          reject(error)
-        })
+            resolve(response)
+          }, error => {
+            reject(error)
+          })
+        }else{
+          orderService.postOrder(orderItems, state.delivery_id, undefined, undefined).then(response => {
+            if(typeof response != 'undefined'){
+              if(response.status==200){
+                dispatch('resetOrderInfo')
+              }
+            }
+            resolve(response)
+          }, error => {
+            reject(error)
+          })
+        }
       })
     },
-    cancelOrder: ({commit}) => {
-      commit('deleteAllItemsFromOrder')
-      commit('resetItemId')
+    cancelOrder: ({commit, dispatch}) => {
+      dispatch('resetOrderInfo')
       commit('resetOrderType')
     },
+    resetOrderInfo: ({commit}) => {
+      commit('deleteAllItemsFromOrder')
+      commit('resetItemId')
+      commit('resetInterval')
+      commit('resetDayOfWeek')
+    }
   },
   getters: {
     totalWeightGrams: (state) => {

@@ -34,16 +34,32 @@ class OrderService {
         })
     }
 
-    async postOrder(items: [], delivery_id: number){
-        const obj = {
-            info: "Info",
-            delivery_date: '2020-08-09',
-            production_date: '2020-08-09',
-            customer_id: 1,
-            status_id: 1,
-            delivery_id: delivery_id,
-            ref_id: 1,
-            list: items
+    async postOrder(items: [], delivery_id: number, order_interval: number|undefined, day_of_week: number|undefined){
+        let obj
+        if(order_interval!=undefined && day_of_week!=undefined){
+            obj = {
+                info: "Info",
+                delivery_date: '2020-08-09',
+                production_date: '2020-08-09',
+                customer_id: 1,
+                status_id: 1,
+                delivery_id: delivery_id,
+                ref_id: 1,
+                list: items,
+                order_interval: order_interval,
+                day_of_week: day_of_week
+            }
+        }else{
+            obj = {
+                info: "Info",
+                delivery_date: '2020-08-09',
+                production_date: '2020-08-09',
+                customer_id: 1,
+                status_id: 1,
+                delivery_id: delivery_id,
+                ref_id: 1,
+                list: items
+            }
         }
         const jsonObj = JSON.stringify(obj)
         return httpClient.post(this.END_POINT, jsonObj)
