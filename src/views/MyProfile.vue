@@ -400,6 +400,7 @@ export default {
                 this.$store.dispatch('toggleLoader', false)
                 console.log(response)
                 if(response.status==200){
+                    this.$store.dispatch('account/logout')
                     this.$router.push('/login')
                 }
             })

@@ -81,7 +81,7 @@ const module: Module<AccountState, {}> = {
         logout: ({ commit, dispatch }) => {
             console.log('logging out')
             commit('RESET')
-            dispatch('order/resetOrderType', null, { root: true })
+            dispatch('order/resetOrderInfo', null, { root: true })
             commit('order/resetOrderType', null, { root: true })
         },
         updateUser: ({ commit }, userinfo) => {
