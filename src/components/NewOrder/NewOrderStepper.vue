@@ -87,6 +87,7 @@
               right
               absolute
               v-on="on"
+              @click="submitOrderDialog=true"
             >
             <v-icon left>mdi-send</v-icon>
               Submit order
@@ -96,7 +97,7 @@
         </v-stepper-items>
       </v-stepper>
     </template>
-    <v-card v-if="!cancelOrderDialog && !checkIfOrderEmpty() && !httpRequestSent && !notValidReccuringOrderDialog">
+    <v-card v-if="submitOrderDialog && !checkIfOrderEmpty()">
         <v-card-title
           color="primary"
         >
@@ -121,13 +122,13 @@
           <v-spacer></v-spacer>
           <v-btn
             color="primary"
-            @click="dialog = false; submitOrder()"
+            @click="dialog = false; submitOrderDialog=false; submitOrder()"
           >
             Yes
           </v-btn>
         </v-card-actions>
       </v-card>
-      <v-card v-if="!cancelOrderDialog && checkIfOrderEmpty() && !httpRequestSent">
+      <v-card v-if="!cancelOrderDialog && checkIfOrderEmpty() && !httpPostSuccess">
         <v-card-title
           color="primary"
         >
@@ -248,7 +249,7 @@
           <v-btn
             outlined
             color="primary"
-            @click="dialog = false; notValidReccuringOrderDialog=false"
+            @click="dialog = false; notValidReccuringOrderDialog=false;"
           >
             OK
           </v-btn>
@@ -281,10 +282,10 @@ import Loader from '@/components/Loader'
         e1: 1,
         dialog: false,
         httpPostSuccess: false,
-        httpRequestSent: false,
         httpPostFailed: false,
         cancelOrderDialog: false,
         notValidReccuringOrderDialog: false,
+        submitOrderDialog: false,
         submitDialogText: "Are you sure you want to submit the order?",
         emptyOrderDialogText: "You cannot submit an empty order. Add coffees to your order before you submit.",
         orderSuccessDialogText: "Your order was successfully registered!",
@@ -297,7 +298,6 @@ import Loader from '@/components/Loader'
       submitOrder(){
         if(this.orderType == 'recurringOrder'){
           if(this.checkIfIntervalAndDayChosen()){
-            this.httpRequestSent = true
             this.$store.dispatch('toggleLoader', true)
             this.$store.dispatch('order/postOrder')
             .then(response => {
@@ -308,13 +308,14 @@ import Loader from '@/components/Loader'
                 }else{
                   this.httpPostFailed = true
                 }
+              }else{
+                  this.httpPostFailed = true
               }
             })
           }else{
             this.notValidReccuringOrderDialog = true
           }
         }else{
-        this.httpRequestSent = true
         this.$store.dispatch('toggleLoader', true)
         this.$store.dispatch('order/postOrder')
         .then(response => {
@@ -322,9 +323,11 @@ import Loader from '@/components/Loader'
           if(typeof response != 'undefined'){
             if(response.status==200){
             this.httpPostSuccess=true
+            }else{
+              httpPostFailed = true
+            }
           }else{
-            httpPostFailed = true
-          }
+              this.httpPostFailed = true
           }
         })
         }

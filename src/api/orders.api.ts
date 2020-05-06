@@ -61,11 +61,11 @@ class OrderService {
         })
     }
     
-    async postOrder(items: [], delivery_id: number, order_interval: number|undefined, day_of_week: number|undefined){
+    async postOrder(items: [], delivery_id: number, order_interval: number|undefined, day_of_week: number|undefined, info: String){
         let obj
         if(order_interval!=undefined && day_of_week!=undefined){
             obj = {
-                info: "Info",
+                info: info,
                 delivery_date: '2020-08-09',
                 production_date: '2020-08-09',
                 customer_id: 1,
@@ -78,7 +78,7 @@ class OrderService {
             }
         }else{
             obj = {
-                info: "Info",
+                info: info,
                 delivery_date: '2020-08-09',
                 production_date: '2020-08-09',
                 customer_id: 1,

@@ -60,7 +60,7 @@
             <br>
             <v-divider></v-divider>
             <br>
-            <p class="inline primary-color">Additional info: </p>{{info}}
+            <p class="inline primary-color">Additional info: </p>{{info == '' ? 'No additional info' : info}}
             <br><br>
             <v-divider></v-divider>
         </v-expansion-panel-content>

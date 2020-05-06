@@ -20,6 +20,7 @@ interface OrderState{
   orderType: String;
   interval?: number;
   dayOfWeek?: number;
+  info: String;
 }
 
 const state: OrderState = {
@@ -28,7 +29,8 @@ const state: OrderState = {
     delivery_id: 1,
     orderType: '',
     interval: 0,
-    dayOfWeek: 0
+    dayOfWeek: 0,
+    info: ''
 }
 
 const module: Module<OrderState, {}> = {
@@ -49,6 +51,9 @@ const module: Module<OrderState, {}> = {
     },
     setDayOfWeek: (state, dayOfWeek) => {
       state.dayOfWeek = dayOfWeek
+    },
+    setInfo: (state, info) => {
+      state.info = info
     },
     pushProductToOrder: (state, {item_id, coffee_id, coffee_name, weight, grams, bag_id, ground_level, ground_level_id, amount}) => {
       state.items.push({
@@ -94,6 +99,9 @@ const module: Module<OrderState, {}> = {
     },
     resetDayOfWeek: (state) => {
       state.dayOfWeek = 0
+    },
+    resetInfo: (state) => {
+      state.info = ''
     }
   },
   actions: {
@@ -116,6 +124,9 @@ const module: Module<OrderState, {}> = {
     changeDayOfWeek: ({commit}, dayOfWeek) => {
       commit('setDayOfWeek', dayOfWeek)
     },
+    changeInfo: ({commit}, info) => {
+      commit('setInfo', info)
+    },
     removeProductFromOrder: ({commit}, item_id) => {
       commit('deleteItemFromOrder', item_id)
     },
@@ -135,7 +146,7 @@ const module: Module<OrderState, {}> = {
       })
       return new Promise((resolve, reject) => {
         if(state.orderType=='recurringOrder'){
-          orderService.postOrder(orderItems, state.delivery_id, state.interval, state.dayOfWeek).then(response => {
+          orderService.postOrder(orderItems, state.delivery_id, state.interval, state.dayOfWeek, state.info).then(response => {
             if(typeof response != 'undefined'){
               if(response.status==200){
                 dispatch('resetOrderInfo')
@@ -146,7 +157,7 @@ const module: Module<OrderState, {}> = {
             reject(error)
           })
         }else{
-          orderService.postOrder(orderItems, state.delivery_id, undefined, undefined).then(response => {
+          orderService.postOrder(orderItems, state.delivery_id, undefined, undefined, state.info).then(response => {
             if(typeof response != 'undefined'){
               if(response.status==200){
                 dispatch('resetOrderInfo')
@@ -168,6 +179,7 @@ const module: Module<OrderState, {}> = {
       commit('resetItemId')
       commit('resetInterval')
       commit('resetDayOfWeek')
+      commit('resetInfo')
     }
   },
   getters: {

@@ -65,7 +65,7 @@
             <br>
             <v-divider></v-divider>
             <br>
-            <p class="inline primary-color">Additional info: </p>{{info}}
+            <p class="inline primary-color">Additional info: </p>{{info == '' ? 'No additional info' : info}}
             <br><br>
             <v-divider></v-divider>
             <br>
@@ -82,7 +82,7 @@
         </v-expansion-panel-content>
     </v-expansion-panel>
     </template>
-    <v-card v-if="inactivateDialog && !inactivateFailedDialog">
+    <v-card v-if="inactivateDialog">
         <v-card-title
           color="primary"
         >
@@ -107,7 +107,7 @@
           <v-spacer></v-spacer>
           <v-btn
             color="primary"
-            @click="dialog = false; inactivateOrder();"
+            @click="dialog = false; inactivateDialog=false; inactivateOrder();"
           >
             Yes
           </v-btn>
