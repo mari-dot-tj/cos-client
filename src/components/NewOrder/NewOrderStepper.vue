@@ -344,7 +344,6 @@ import Loader from '@/components/Loader'
       },
       cancelOrder(){
         this.$store.dispatch('order/cancelOrder')
-        this.$router.push('/order-overview')
       },
       finishOrder(){
         this.$store.dispatch('order/resetOrderType')

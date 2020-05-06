@@ -19,7 +19,20 @@
             <br>
             <v-row>
                 <v-col cols="6">
-                    <h3 class="heading">Interval</h3>
+                    <v-tooltip 
+                    top
+                    color="#ffffff">
+                        <template v-slot:activator="{ on }">
+                            <h3 class="heading">Interval
+                                <v-icon
+                                v-on="on"
+                                color="primary">mdi-information-outline</v-icon>
+                            </h3>
+                        </template>
+                        <v-card width="250px">
+                            <v-card-text>The interval between coffee deliveries</v-card-text>
+                        </v-card>
+                    </v-tooltip>
                     <v-select
                     ref="intervalSelect"
                     color="primary"
@@ -32,7 +45,20 @@
                     ></v-select>
                 </v-col>
                 <v-col cols="6">
-                    <h3 class="heading">Delivery day</h3>
+                    <v-tooltip 
+                    top
+                    color="#ffffff">
+                        <template v-slot:activator="{ on }">
+                            <h3 class="heading">Delivery day
+                                <v-icon
+                                v-on="on"
+                                color="primary">mdi-information-outline</v-icon>
+                            </h3>
+                        </template>
+                        <v-card width="250px">
+                            <v-card-text>The day of week you would like to receive your coffee based on the interval you select.</v-card-text>
+                        </v-card>
+                    </v-tooltip>
                     <v-select
                     ref="dayOfWeekSelect"
                     color="primary"

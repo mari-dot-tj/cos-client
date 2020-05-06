@@ -8,16 +8,34 @@
         <h2 id="newOrderHeading">What type of order would you like to place?</h2>
       </v-card-title>
       <v-card-actions class="justify-center">
-        <v-btn
-        color="primary"
-        @click="setOneTimeOrder()">
-          One-time order
-        </v-btn>
-        <v-btn
-        color="primary"
-        @click="setRecurringOrder()">
-          Recurring order
-        </v-btn>
+        <v-tooltip color="#ffffff" bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn
+            id="orderTypeButton"
+            color="primary"
+            @click="setOneTimeOrder()"
+            v-on="on">
+              One-time order
+            </v-btn>
+          </template>
+          <v-card width="250px">
+            <v-card-text>An order that occurs only once.</v-card-text>
+          </v-card>
+        </v-tooltip>
+        <v-tooltip color="#ffffff" bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn
+            id="orderTypeButton"
+            color="primary"
+            @click="setRecurringOrder()"
+            v-on="on">
+              Recurring order
+            </v-btn>
+          </template>
+          <v-card width="250px">
+            <v-card-text>A repetitive order that occurs in your chosen interval.</v-card-text>
+          </v-card>
+        </v-tooltip>
       </v-card-actions>
     </v-card>
     <NewOrderStepper
@@ -29,6 +47,10 @@
 #newOrderHeading {
   margin-top: 10%;
   color: #61706b;
+}
+
+#orderTypeButton {
+  margin: 1%;
 }
 </style>
 
