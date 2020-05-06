@@ -19,11 +19,7 @@
       </v-tab-item>
 
       <v-tab-item>
-        <v-card
-          flat
-        >
-          <v-card-text>Fixed order to be implemented here</v-card-text>
-        </v-card>
+        <OrderOverviewRecurringOrders/>
       </v-tab-item>
     </v-tabs-items>
   </v-card>
@@ -34,17 +30,19 @@
 
 <script>
 import OrderOverviewHistory from '@/components/OrderOverview/OrderOverviewHistory'
+import OrderOverviewRecurringOrders from '@/components/OrderOverview/OrderOverviewRecurringOrders'
 
 export default {
     name: 'OrderOverviewTab',
     data: function (){
         return{
             tab: null,
-            items: ['Order history', 'Fixed orders']
+            items: ['Order history', 'Recurring orders']
         }
     },
     components: {
-      OrderOverviewHistory
+      OrderOverviewHistory,
+      OrderOverviewRecurringOrders
     }
 }
 </script>

@@ -88,6 +88,8 @@ export default {
                     }
 
                     console.log('ordreliste: ',this.orders)
+                }else{
+                    this.orderEmpty = true
                 }
             })
             .catch((error) => {

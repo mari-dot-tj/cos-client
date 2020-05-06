@@ -34,6 +34,33 @@ class OrderService {
         })
     }
 
+    async getActiveRecurringOrders(){
+        return httpClient.get(this.END_POINT+'/fixed-order/active/1')
+        .then(function (response) {
+            console.log(response)
+            return response
+        })
+        .catch((error) => {
+            console.warn(error)
+        })
+    }
+
+    async inactivateOrderById(orderId: number){
+        const obj = {
+            active: 0,
+            order_id: orderId
+        }
+        const jsonObj = JSON.stringify(obj)
+        return httpClient.put(this.END_POINT, jsonObj)
+        .then(function (response) {
+            console.log(response)
+            return response
+        })
+        .catch((error) => {
+            console.warn(error)
+        })
+    }
+    
     async postOrder(items: [], delivery_id: number, order_interval: number|undefined, day_of_week: number|undefined){
         let obj
         if(order_interval!=undefined && day_of_week!=undefined){
