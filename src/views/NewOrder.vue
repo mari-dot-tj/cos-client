@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <NavBar/>
     <v-card 
     v-if="orderType==''"
     min-height="600px">

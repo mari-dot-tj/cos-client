@@ -5,7 +5,6 @@
     width="600">
     <template v-slot:activator="{ on }">
         <v-container>
-            <NavBar/>
             <v-card>
                 <v-card-title id="profileHeading">
                     <h2>My profile</h2>

@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <NavBar/>
     <OrderOverviewTab/>
   </v-container>
 </template>
