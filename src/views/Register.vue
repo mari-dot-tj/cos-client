@@ -142,7 +142,7 @@
         <v-card-title
           color="primary"
         >
-          Successful register
+          Success! Check email for temporary password.
         </v-card-title>
 
         <v-card-text>

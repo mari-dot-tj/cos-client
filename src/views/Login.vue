@@ -17,7 +17,7 @@
                 <v-card-text>
                     <v-form ref="form">
                         <v-text-field
-                        label="Username"
+                        label="Email"
                         prepend-icon="mdi-account-circle"
                         :rules="emailRules"
                         required

@@ -50,6 +50,7 @@ export default {
                     response.data.map(coffeeOrderObj => {
                         /* Adds order to orders if orderId does not exist in orders */
                         if( this.orders.length==0 || (this.orders.find(order => order.orderId == coffeeOrderObj.order_id)) == undefined ){
+                                
                                 const orderDate = new Date(coffeeOrderObj.order_date)
                                 const formattedOrderDate = orderDate.getDate()+'/'+(orderDate.getMonth()+1)+'/'+orderDate.getFullYear()
 
