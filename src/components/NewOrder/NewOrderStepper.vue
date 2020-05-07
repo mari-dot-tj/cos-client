@@ -5,10 +5,13 @@
     persistent>
     <template v-slot:activator="{ on }">
       <v-stepper v-model="e1">
+        <v-card width="100%" flat class="text-center">
+          <v-card-text id="orderTypeHeading">{{orderType == 'oneTimeOrder' ? 'NEW ONE-TIME ORDER' : 'NEW RECURRING ORDER'}}</v-card-text>
+        </v-card>
         <v-stepper-header>
           <v-stepper-step :complete="e1 > 1" step="1">
               Choose Coffee
-        </v-stepper-step>
+          </v-stepper-step>
 
           <v-divider></v-divider>
 
@@ -16,7 +19,7 @@
 
           <v-divider></v-divider>
 
-          <v-stepper-step step="3">Delivery</v-stepper-step>
+          <v-stepper-step step="3">Choose delivery</v-stepper-step>
         </v-stepper-header>
 
         <v-stepper-items>
@@ -97,7 +100,7 @@
         </v-stepper-items>
       </v-stepper>
     </template>
-    <v-card v-if="submitOrderDialog && !checkIfOrderEmpty()">
+    <v-card v-if="submitOrderDialog && !checkIfOrderEmpty() && !cancelOrderDialog">
         <v-card-title
           color="primary"
         >
@@ -266,6 +269,11 @@
   .stepperButton {
     padding-top: 15px;
     padding-bottom: 15px;
+  }
+
+  #orderTypeHeading {
+    font-size: 17px;
+    color: #59c8a5 !important;
   }
 </style>
 

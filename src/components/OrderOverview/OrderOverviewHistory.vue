@@ -50,11 +50,20 @@ export default {
                     response.data.map(coffeeOrderObj => {
                         /* Adds order to orders if orderId does not exist in orders */
                         if( this.orders.length==0 || (this.orders.find(order => order.orderId == coffeeOrderObj.order_id)) == undefined ){
+                                const orderDate = new Date(coffeeOrderObj.order_date)
+                                const formattedOrderDate = orderDate.getDate()+'/'+(orderDate.getMonth()+1)+'/'+orderDate.getFullYear()
+
+                                const productionDate = new Date(coffeeOrderObj.production_date)
+                                const formattedProductionDate = productionDate.getDate()+'/'+(productionDate.getMonth()+1)+'/'+productionDate.getFullYear()
+                                
+                                const deliveryDate = new Date(coffeeOrderObj.delivery_date)
+                                const formattedDeliveryDate = deliveryDate.getDate()+'/'+(deliveryDate.getMonth()+1)+'/'+deliveryDate.getFullYear()
+
                                 this.orders.push({
                                 orderId: coffeeOrderObj.order_id,
-                                orderDate: new Date(coffeeOrderObj.order_date),
-                                productionDate: new Date(coffeeOrderObj.production_date), 
-                                deliveryDate: new Date(coffeeOrderObj.delivery_date),
+                                orderDate: formattedOrderDate,
+                                productionDate: formattedProductionDate, 
+                                deliveryDate: formattedDeliveryDate,
                                 deliveryOption: coffeeOrderObj.delivery_option,
                                 info: coffeeOrderObj.info,
                                 status: coffeeOrderObj.status_name,

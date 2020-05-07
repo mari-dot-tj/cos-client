@@ -9,7 +9,7 @@
             <v-fade-transition>
                 <v-row v-if="open">
                     <v-col cols="3">
-                        <p class="inline">Order date: </p>{{orderDate.getDate()+'/'+orderDate.getMonth()+'/'+orderDate.getFullYear()}}
+                        <p class="inline">Order date: </p>{{orderDate}}
                     </v-col>
 
                     <v-col cols="3">
@@ -19,7 +19,7 @@
                 
                 <v-row v-else>
                     <v-col cols="3">
-                        <p class="inline">Order date: </p>{{orderDate.getDate()+'/'+orderDate.getMonth()+'/'+orderDate.getFullYear()}}
+                        <p class="inline">Order date: </p>{{orderDate}}
                     </v-col>
 
                     <v-col cols="3">
@@ -168,16 +168,16 @@ export default {
     },
     props: {
         orderDate:{
-            type: Date
+            type: String
         },
         orderId: {
             type: Number
         },
         productionDate: {
-            type: Date
+            type: String
         },
         deliveryDate: {
-            type: Date
+            type: String
         },
         deliveryOption: {
             type: String
