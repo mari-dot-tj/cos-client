@@ -1,61 +1,71 @@
 <template>
 <v-skeleton-loader
-      :loading="groundLevelDropdown.length == 0 || weightDropdown.length == 0"
+      :loading="groundLevelDropdown == undefined || weightDropdown == undefined"
       transition="fade-transition"
       height="94"
       type="text"
     >
     <v-row>
-        <v-col cols="4">
-            <span class="rowOnLine">
-                {{coffeeName}}
-            </span>
+        <v-col :cols="$vuetify.breakpoint.lgAndUp ? 4 : 3">
+            <v-tooltip 
+            right
+            color="#ffffff">
+                <template v-slot:activator="{ on }">
+                    <v-icon
+                    v-on="on"
+                    color="primary">mdi-information-outline</v-icon>
+                    <span>
+                        {{coffeeName}}
+                    </span>
+                </template>
+                <v-card width="250px">
+                    <v-card-title id="description-title">Description</v-card-title>
+                    <v-card-text>{{coffeeDescription}}</v-card-text>
+                </v-card>
+            </v-tooltip>
         </v-col>
         <v-col cols="2">
             <v-select
+            ref="weightSelect"
             class="rowOnLine"
             :items="weightDropdown"
-            :label="bags[0] == undefined ? weight : bags[0].size"
+            :label="selectLabel"
             single-line
+            :error-messages="weightError"
+            v-on:change="weightError=''"
             v-model="weight"
             ></v-select>
         </v-col>
-        <v-col cols="2">
+        <v-col cols="3">
             <v-select
+            ref="groundLevelSelect"
             class="rowOnLine"
             :items="groundLevelDropdown"
-            :label="allGroundLevels[0] == undefined ? groundLevel : allGroundLevels[0].level_name"
+            :label="selectLabel"
             single-line
+            :error-messages="groundLevelError"
+            v-on:change="groundLevelError=''"
             v-model="groundLevel"
             ></v-select>
         </v-col>
-        <v-col cols="2" class="rowOnLine">
-            <v-row>
-                <v-col cols="3">
-                    <v-icon @click="decrementAmount">mdi-minus</v-icon>
-                </v-col>
-                <v-col cols="6" class="withOutSidePadding">
-                    <v-form ref="amountField">
-                        <v-text-field
-                        class="rowOnLine"
-                        type="number"
-                        center
-                        min=0
-                        v-model="amount"
-                        :rules="amountFieldRules"
-                        ></v-text-field>
-                    </v-form>
-                </v-col>
-                <v-col cols="3">
-                    <v-icon @click="incrementAmount">mdi-plus</v-icon>
-                </v-col>
-            </v-row>
+        <v-col cols="1">
+            <v-text-field
+            class="rowOnLine"
+            ref="amountField"
+            type="number"
+            min=0
+            v-model="amount"
+            :error-messages="amountError"
+            v-on:change="amountError=''"
+            ></v-text-field>
         </v-col>
-        <v-col cols="2">
+        <v-col :cols="$vuetify.breakpoint.lgAndUp ? 2 : 3">
             <v-btn 
             outlined color="primary" 
-            class="rowOnLine" 
-            @click="checkIfValid() ? $emit('add-to-order', coffeeId, coffeeName, weight, getGramsOfWeight(weight), findBagIdByWeight(weight), groundLevel, findGroundLevelIdbyGroundLevel(groundLevel) , amount) & resetFields() : valid=false">
+            class="rowOnLine"
+            right
+            absolute
+            @click="checkIfValid() ? $emit('add-to-order', coffeeId, coffeeName, weight, groundLevel, parseInt(amount)) & resetFields() : valid=false">
                 Add to order
             </v-btn>
         </v-col>
@@ -72,11 +82,17 @@
     padding-left: 0px;
     padding-right: 0px;
 }
+
+#description-title {
+    color: #59c8a5;
+}
 </style>
 
 <script>
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import bagService from '@/api/bags.api'
+import groundLevelService from '@/api/groundLevels.api'
 
 export default {
     name: 'NewOrderProductListItem',
@@ -88,38 +104,28 @@ export default {
         coffeeId: {
             type: Number,
             required: true
+        },
+        coffeeDescription: {
+            type: String
+        },
+        weightDropdown: {
+            type: Array
+        },
+        groundLevelDropdown: {
+            type: Array
         }
     },
     data: function (){
         return{
             valid: true,
-            weight: "",
+            weight: '',
             grams: 0,
-            groundLevel: "",
+            groundLevel: '',
             amount: 0,
-            weightDropdown: [],
-            groundLevelDropdown: [],
-            amountFieldRules: [
-                v => v>0 || 'Amount must be over 0!'
-            ]
-        }
-    },
-    computed: {
-      ...mapState('products', ['bags']),
-      ...mapState('products', ['allGroundLevels'])
-    },
-    watch: {
-        bags: function (newValue, oldValue){
-            this.weight=newValue[0].size
-            newValue.map(bagObj => {
-                this.weightDropdown.push(bagObj.size)
-            })
-        },
-        allGroundLevels: function(newValue, oldValue){
-            this.groundLevel=newValue[0].level_name
-            newValue.map(groundLevelObj => {
-                this.groundLevelDropdown.push(groundLevelObj.level_name)
-            })
+            selectLabel: '--Select option--',
+            weightError: '',
+            groundLevelError: '',
+            amountError: ''
         }
     },
     methods: {
@@ -130,34 +136,32 @@ export default {
             this.amount == 0 ? this.amount = 0 : this.amount--;
         },
         resetFields(){
-            this.weight = this.weightDropdown[0]
-            this.groundLevel = this.groundLevelDropdown[0]
+            this.$refs.weightSelect.reset()
+            this.$refs.groundLevelSelect.reset()
             this.amount = 0
+            this.weight = ''
+            this.groundLevel = ''
             this.$refs.amountField.resetValidation()
+            this.amountError=''
+            this.weightError=''
+            this.groundLevelError=''
         },
         checkIfValid(){
-            if((this.$refs.amountField).validate()){
+            if(this.amount>0 && this.weight!='' && this.groundLevel!=''){
                 return true
-            }else return false
+            }else{
+                if(this.weight==''){
+                    this.weightError="Select weight berfore adding to order."
+                }
+                if(this.groundLevel==''){
+                    this.groundLevelError="Select ground level berfore adding to order."
+                }
+                if(this.amount==0){
+                    this.amountError="Amount must be over 0."
+                }
+                return false
+            }
         },
-        getGramsOfWeight(weight){
-            let index = this.bags.map(bagObj => {
-                return bagObj.size
-            }).indexOf(weight)
-            return this.bags[index].grams
-        },
-        findBagIdByWeight(weight){
-            let index = this.bags.map(bagObj => {
-                return bagObj.size
-            }).indexOf(weight)
-            return this.bags[index].bag_id
-        },
-        findGroundLevelIdbyGroundLevel(groundLevel){
-            let index = this.allGroundLevels.map(groundLevelObj => {
-                return groundLevelObj.level_name
-            }).indexOf(groundLevel)
-            return this.allGroundLevels[index].ground_level_id
-        }
     }
 }
 </script>

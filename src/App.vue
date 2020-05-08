@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <NavBar v-if="showNavBar()"/>
     <v-content>
       <v-container fluid>
         <router-view></router-view>
@@ -11,6 +12,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import NavBar from './components/NavBar/NavBar.vue';
+import { mapState } from 'vuex';
 
 export default Vue.extend({
   name: 'App',
@@ -18,9 +20,16 @@ export default Vue.extend({
   components: {
     NavBar,
   },
-
-  data: () => ({
-    //
-  }),
+  computed: {
+    ...mapState('account', ['loggedIn'])
+  },
+  methods: {
+    showNavBar(){
+      if(this.loggedIn){
+        if(this.$route.name == 'OrderOverview' || this.$route.name == 'NewOrder' || this.$route.name == 'MyProfile')
+        return true
+      }else return false
+    }
+  }
 });
 </script>

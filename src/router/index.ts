@@ -11,6 +11,10 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/',
+    redirect: '/login'
+  },
+  {
     path: '/order-overview',
     name: 'OrderOverview',
     component: OrderOverview

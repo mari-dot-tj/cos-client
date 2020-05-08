@@ -1,29 +1,15 @@
 <template>
 <v-container>
     <v-row>
-        <v-col cols="2" class="rowOnLine">
-            <v-row>
-                <v-col cols="3">
-                    <v-icon @click="decrementAmount">mdi-minus</v-icon>
-                </v-col>
-                <v-col cols="6" class="withOutSidePadding">
-                    <v-form ref="amountField">
-                        <v-text-field
-                        class="rowOnLine"
-                        type="number"
-                        center
-                        min=0
-                        v-model="newAmount"
-                        :rules="amountFieldRules"
-                        >
-                        {{newAmount}}
-                        </v-text-field>
-                    </v-form>
-                </v-col>
-                <v-col cols="3">
-                    <v-icon @click="incrementAmount">mdi-plus</v-icon>
-                </v-col>
-            </v-row>
+        <v-col cols="2" class="rowOnLine amount">
+            <v-text-field
+            class="rowOnLine"
+            ref="amountField"
+            type="number"
+            min=1
+            v-model="newAmount"
+            v-on:change="changeAmount()"
+            ></v-text-field>
         </v-col>
         <v-col cols="2">
             <span class="rowOnLine">
@@ -41,14 +27,20 @@
             </span>
         </v-col>
         <v-col cols="4">
-            <v-btn 
-            class="rowOnLine"
-            absolute
-            right
-            outlined color="primary"
-            @click="removeFromOrder(itemId) & $emit('removed-from-order')">
-                Remove
-            </v-btn>
+            <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                    <v-btn 
+                    class="rowOnLine"
+                    absolute
+                    right
+                    outlined color="primary"
+                    v-on="on"
+                    @click="removeFromOrder(itemId) & $emit('removed-from-order')">
+                        <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                </template>
+                <span>Remove item</span>
+            </v-tooltip>
         </v-col>
     </v-row>
     <v-divider></v-divider>
@@ -59,6 +51,10 @@
 .rowOnLine {
     margin-top: 0px;
     padding-top: 0px;
+}
+
+.amount {
+    margin-top: 7px;
 }
 </style>
 
@@ -100,13 +96,8 @@ export default {
         }
     },
     methods: {
-        incrementAmount(){
-            this.newAmount++;
-            this.$store.dispatch('order/changeItemAmount', {item_id: this.itemId, newAmount: this.newAmount});
-        },
-        decrementAmount(){
-            this.newAmount == 0 ? this.newAmount = 0 : this.newAmount--;
-            this.$store.dispatch('order/changeItemAmount', {item_id: this.itemId, newAmount: this.newAmount});
+        changeAmount(){
+            this.$store.dispatch('order/changeItemAmount', {item_id: this.itemId, newAmount: parseInt(this.newAmount)});
         },
         removeFromOrder: function(itemId){
             this.$store.dispatch('order/removeProductFromOrder', itemId)

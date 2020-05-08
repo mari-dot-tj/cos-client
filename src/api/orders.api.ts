@@ -34,22 +34,65 @@ class OrderService {
         })
     }
 
-    async postOrder(items: [], delivery_id: number){
+    async getActiveRecurringOrders(){
+        return httpClient.get(this.END_POINT+'/fixed-order/active/1')
+        .then(function (response) {
+            console.log(response)
+            return response
+        })
+        .catch((error) => {
+            console.warn(error)
+        })
+    }
+
+    async inactivateOrderById(orderId: number){
         const obj = {
-            info: "Info",
-            delivery_date: '2020-08-09',
-            production_date: '2020-08-09',
-            customer_id: 1,
-            status_id: 1,
-            delivery_id: delivery_id,
-            ref_id: 1,
-            list: items
+            active: 0,
+            order_id: orderId
+        }
+        const jsonObj = JSON.stringify(obj)
+        return httpClient.put(this.END_POINT, jsonObj)
+        .then(function (response) {
+            console.log(response)
+            return response
+        })
+        .catch((error) => {
+            console.warn(error)
+        })
+    }
+    
+    async postOrder(items: [], delivery_id: number, order_interval: number|undefined, day_of_week: number|undefined, info: String){
+        let obj
+        if(order_interval!=undefined && day_of_week!=undefined){
+            obj = {
+                info: info,
+                delivery_date: '2020-08-09',
+                production_date: '2020-08-09',
+                customer_id: 1,
+                status_id: 1,
+                delivery_id: delivery_id,
+                ref_id: 1,
+                list: items,
+                order_interval: order_interval,
+                day_of_week: day_of_week
+            }
+        }else{
+            obj = {
+                info: info,
+                delivery_date: '2020-08-09',
+                production_date: '2020-08-09',
+                customer_id: 1,
+                status_id: 1,
+                delivery_id: delivery_id,
+                ref_id: 1,
+                list: items
+            }
         }
         const jsonObj = JSON.stringify(obj)
         return httpClient.post(this.END_POINT, jsonObj)
         .then(function (response) {
             console.log("Post order request status: ",response.status)
-            return response.status
+            return response
         })
         .catch((error) => {
             console.warn(error)

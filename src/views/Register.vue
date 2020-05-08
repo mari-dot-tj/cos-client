@@ -97,10 +97,17 @@
                         </v-checkbox>
                     </v-row>
                     <v-btn
+                    outlined=""
                     color="primary"
-                    class="registerBtn"
+                    to="/login"
+                    class="mr-4">
+                        Back to login
+                    </v-btn>
+                    <v-btn
+                    color="primary"
                     v-on="on"
-                    @click="registerIfValid">
+                    @click="registerIfValid"
+                    class="mr-4">
                         Register
                     </v-btn>
                 </v-form>
@@ -135,7 +142,7 @@
         <v-card-title
           color="primary"
         >
-          Successful register
+          Success! Check email for temporary password.
         </v-card-title>
 
         <v-card-text>
@@ -191,9 +198,6 @@
     padding-bottom: 0;
     margin-bottom: 0;
     align-self: baseline;
-}
-.registerBtn{
-    align-self: center;
 }
 </style>
 

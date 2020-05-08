@@ -4,7 +4,7 @@
             <v-fade-transition>
                 <v-row v-if="open">
                     <v-col cols="3">
-                        <p class="inline">Order date: </p>{{orderDate.getDate()+'/'+orderDate.getMonth()+'/'+orderDate.getYear()}}
+                        <p class="inline">Order date: </p>{{orderDate}}
                     </v-col>
 
                     <v-col cols="3">
@@ -14,7 +14,7 @@
                 
                 <v-row v-else>
                     <v-col cols="3">
-                        <p class="inline">Order date: </p>{{orderDate.getDate()+'/'+orderDate.getMonth()+'/'+orderDate.getYear()}}
+                        <p class="inline">Order date: </p>{{orderDate}}
                     </v-col>
 
                     <v-col cols="3">
@@ -22,7 +22,7 @@
                     </v-col>
 
                     <v-col cols="3">
-                        Delivery date: {{deliveryDate.getDate()+'/'+deliveryDate.getMonth()+'/'+deliveryDate.getYear()}}
+                        Delivery date: {{deliveryDate}}
                     </v-col>
 
                     <v-col cols="3">
@@ -50,7 +50,7 @@
                 </v-col>
 
                 <v-col cols="4">
-                    <p class="primary-color">Delivery date </p>{{deliveryDate.getDate()+'/'+deliveryDate.getMonth()+'/'+deliveryDate.getYear()}}
+                    <p class="primary-color">Delivery date </p>{{deliveryDate}}
                 </v-col>
 
                 <v-col cols="4">
@@ -60,7 +60,7 @@
             <br>
             <v-divider></v-divider>
             <br>
-            <p class="inline primary-color">Additional info: </p>{{info}}
+            <p class="inline primary-color">Additional info: </p>{{info == '' ? 'No additional info' : info}}
             <br><br>
             <v-divider></v-divider>
         </v-expansion-panel-content>
@@ -83,16 +83,16 @@ export default {
     name: 'OrderOverviewHistoryItem',
     props: {
         orderDate:{
-            type: Date
+            type: String
         },
         orderId: {
             type: Number
         },
         productionDate: {
-            type: Date
+            type: String
         },
         deliveryDate: {
-            type: Date
+            type: String
         },
         deliveryOption: {
             type: String

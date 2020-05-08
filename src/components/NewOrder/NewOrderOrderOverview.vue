@@ -14,7 +14,9 @@
         :groundLevel="item.ground_level"
         :amount="item.amount"
         />
-        <v-snackbar v-model="removedFromOrderSnackBar">
+        <v-snackbar 
+        v-model="removedFromOrderSnackBar"
+        :timeout=1000>
             {{ removedFromOrderSnackBarText }}
             <v-btn
                 color="primary"

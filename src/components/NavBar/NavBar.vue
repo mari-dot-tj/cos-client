@@ -19,9 +19,13 @@
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn text @click="logout">Log out</v-btn>
+        <v-btn text @click="logout">
+          <v-icon left>mdi-logout</v-icon>
+          Log out
+        </v-btn>
       </v-toolbar-items>
     </v-app-bar>
+    <Loader/>
   </div>
 </template>
 
@@ -36,11 +40,13 @@ import Vue from 'vue'
 import NavBarButton from './NavBarButton.vue'
 import customerService from '@/api/customer.api'
 import { mapActions, mapGetters } from 'vuex'
+import Loader from '@/components/Loader'
 
 export default Vue.extend({
     name: 'NavBar',
     components: {
-      NavBarButton
+      NavBarButton,
+      Loader
     },
     data: () => ({
       activeItem: '',
@@ -56,15 +62,18 @@ export default Vue.extend({
     methods: {
       ...mapActions('account', ['logout']),
       logout(){
+        this.$store.dispatch('toggleLoader', true)
         customerService.logout()
           .then(response => {
             if(response!==undefined && response.status == 200){
               this.$store.dispatch('account/logout')
+              this.$store.dispatch('toggleLoader', false)
               this.$router.push('/login')
             }
           })
           .catch(error => {
             console.log(error)
+            this.$store.dispatch('toggleLoader', false)
           })
       },
     }
