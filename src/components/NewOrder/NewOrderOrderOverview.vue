@@ -16,7 +16,7 @@
         />
         <v-snackbar 
         v-model="removedFromOrderSnackBar"
-        :timeout=1000>
+        :timeout=4000>
             {{ removedFromOrderSnackBarText }}
             <v-btn
                 color="primary"

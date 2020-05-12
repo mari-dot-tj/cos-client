@@ -74,23 +74,23 @@
                 <v-btn
                 color="primary"
                 v-on="on"
-                @click="inactivateDialog=true">
+                @click="cancelRecOrderDialog=true">
                     <v-icon>mdi-close-circle</v-icon>
-                    Inactivate
+                    Cancel order
                 </v-btn>
             </v-card-actions>
         </v-expansion-panel-content>
     </v-expansion-panel>
     </template>
-    <v-card v-if="inactivateDialog">
+    <v-card v-if="cancelRecOrderDialog">
         <v-card-title
           color="primary"
         >
-          Inactivate order?
+          Cancel recurring order?
         </v-card-title>
 
         <v-card-text>
-          Are you sure you want to inactivate this order?
+          Are you sure you want to cancel this recurring order?
         </v-card-text>
 
         <v-divider></v-divider>
@@ -107,13 +107,13 @@
           <v-spacer></v-spacer>
           <v-btn
             color="primary"
-            @click="dialog = false; inactivateDialog=false; inactivateOrder();"
+            @click="dialog = false; cancelRecOrderDialog=false; cancelRecOrder();"
           >
             Yes
           </v-btn>
         </v-card-actions>
     </v-card>
-    <v-card v-if="inactivateFailedDialog">
+    <v-card v-if="cancelRecOrderFailedDialog">
         <v-card-title
           color="primary"
         >
@@ -121,7 +121,7 @@
         </v-card-title>
 
         <v-card-text>
-          Could not inactivate the order. Try again later.
+          Could not cancel the order. Try again later.
         </v-card-text>
 
         <v-divider></v-divider>
@@ -130,7 +130,7 @@
           <v-spacer></v-spacer>
           <v-btn
             color="primary"
-            @click="dialog = false; inactivateFailedDialog=false"
+            @click="dialog = false; cancelRecOrderFailedDialog=false"
           >
             OK
           </v-btn>
@@ -162,8 +162,8 @@ export default {
     data(){
         return{
             dialog: false,
-            inactivateDialog: false,
-            inactivateFailedDialog: false
+            cancelRecOrderDialog: false,
+            cancelRecOrderFailedDialog: false
         }
     },
     props: {
@@ -199,20 +199,20 @@ export default {
         }
     },
     methods: {
-        inactivateOrder(){
+        cancelRecOrder(){
             this.$store.dispatch('toggleLoader', true)
-            orderService.inactivateOrderById(this.orderId)
+            orderService.cancelRecOrderById(this.orderId)
             .then(response => {
                 this.$store.dispatch('toggleLoader', false)
                 if(typeof response != undefined && response.status == 200){
                     this.$emit('remove-order', this.orderId)
                 }else{
-                    this.inactivateFailedDialog=true
+                    this.cancelRecOrderFailedDialog=true
                     this.dialog=true
                 }
             })
             .catch((error) => {
-                this.inactivateFailedDialog=true
+                this.cancelRecOrderFailedDialog=true
                 this.dialog=true
                 console.warn(error)
             })

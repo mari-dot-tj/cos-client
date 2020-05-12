@@ -122,7 +122,7 @@
         </v-card-title>
 
         <v-card-text>
-          Something went wrong. Please contakt Jacobsen and Svart to register.
+          Something went wrong. Please contact Jacobsen and Svart to register.
         </v-card-text>
 
         <v-divider></v-divider>

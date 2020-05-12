@@ -87,9 +87,14 @@ export default {
 
                     /* Sorts orders by date - newest first */
                     this.orders.sort(function compare(a, b) {
-                        var dateA = new Date(a.orderDate);
-                        var dateB = new Date(b.orderDate);
-                        return dateB - dateA;
+                        const dateA = new Date(a.orderDate);
+                        const dateB = new Date(b.orderDate);
+                        return dateB - dateA
+                    })
+                    
+                    /* Sorts by id (highest first) in case orders have same date */
+                    this.orders.sort(function compare(a, b) {
+                        return b.orderId - a.orderId
                     })
 
                     /* Sets boolean for v-card v-if orderEmpty if the no orders are received */

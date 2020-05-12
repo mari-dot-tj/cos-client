@@ -12,7 +12,7 @@
         :groundLevelDropdown="groundLevelDropdown"/>
         <v-snackbar 
         v-model="addedToOrderSnackBar"
-        :timeout=1000>
+        :timeout=4000>
             {{ addedToOrderSnackBarText }}
             <v-btn
                 color="primary"

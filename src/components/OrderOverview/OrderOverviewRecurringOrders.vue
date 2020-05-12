@@ -111,6 +111,11 @@ export default {
                         return dateB - dateA;
                     })
 
+                    /* Sorts by id (highest first) in case orders have same date */
+                    this.orders.sort(function compare(a, b) {
+                        return b.orderId - a.orderId
+                    })
+
                     /* Sets boolean for v-card v-if recurringOrdersEmpty if the no recurringOrders are received */
                     if(this.recurringOrders.length==0){
                         this.recurringOrdersEmpty = true

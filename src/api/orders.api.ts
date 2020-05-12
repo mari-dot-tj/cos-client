@@ -45,7 +45,7 @@ class OrderService {
         })
     }
 
-    async inactivateOrderById(orderId: number){
+    async cancelRecOrderById(orderId: number){
         const obj = {
             active: 0,
             order_id: orderId
