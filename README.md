@@ -29,6 +29,12 @@ $ npm run build
 ```
 This command will build the `dist` folder at the root of the repository. 
 
+#### For more information about the project, see the [WIKI] pages.
+
+## License
+[MIT](LICENSE)
+
 [//]: #
 [vue]: <https://vuejs.org>
 [cos-server]: <https://github.com/mari-dot-tj/cos-server>
+[WIKI]: <https://github.com/mari-dot-tj/cos-client/wiki>
