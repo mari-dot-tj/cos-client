@@ -59,6 +59,7 @@ const module: Module<AccountState, {}> = {
             state.user.subscription = parseInt(userInfo.subscription)
             state.user.zip_code = userInfo.zip_code
         },
+        /* resets all state attributes */
         RESET: state => {
             state.token = '',
             state.user = {
@@ -73,33 +74,36 @@ const module: Module<AccountState, {}> = {
                 zip_code: -1,
                 ref_id: -1,
                 last_login: -1
-            }
+            },
+            state.loggedIn = false
         }
     },
     actions: {
+        /* sets all attributes in account state, and auth http header with valid token */
         login: ({ commit }, { token, user }) => {
             commit('SET_TOKEN', token)
             commit('SET_USER', user)
             commit('SET_LOGGEDIN', true)
-            // set auth header
             httpClient.defaults.headers.common['Authorization'] = `Bearer ${token}`
         },
+        /* resets user state, order state and sets logged in to false */
         logout: ({ commit, dispatch }) => {
-            console.log('logging out')
             commit('SET_LOGGEDIN', false)
             commit('RESET')
             dispatch('order/resetOrderInfo', null, { root: true })
             commit('order/resetOrderType', null, { root: true })
         },
+        /* sets user state to updated user info */
         updateUser: ({ commit }, userinfo) => {
-            console.log('updating user state')
             commit('SET_USER', userinfo)
         }
     },
     getters: {
+        /* returns state token */
         isLoggedIn: state => {
             return state.token
         },
+        /* return state user */
         getUser: state => {
             return state.user
         }

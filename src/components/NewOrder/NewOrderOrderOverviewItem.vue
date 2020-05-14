@@ -96,12 +96,15 @@ export default {
         }
     },
     methods: {
+        /* changes state amount of item if changed in amount field */
         changeAmount(){
             this.$store.dispatch('order/changeItemAmount', {item_id: this.itemId, newAmount: parseInt(this.newAmount)});
         },
+        /* removes item with item id from state item list */
         removeFromOrder: function(itemId){
             this.$store.dispatch('order/removeProductFromOrder', itemId)
         },
+        /* validates amount field -> returns true if valid */
         checkIfValid(){
             if((this.$refs.amountField).validate()){
                 return true

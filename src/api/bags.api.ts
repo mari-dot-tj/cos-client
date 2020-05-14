@@ -10,10 +10,10 @@ class BagService {
 
     private END_POINT = '/bag'
 
+    /* Gets all bags from server, independent of customer */
     async getAllBags(): Promise<Array<bagObject>> { 
         return httpClient.get(this.END_POINT)
             .then(function (response) {
-                console.log(response)
                 return response.data
             })
             .catch((error) => {
@@ -21,10 +21,10 @@ class BagService {
             })
     }
 
+    /* Gets bags connected to customer logged in (token sent with http header)*/
     async getCustomerBags(): Promise<Array<bagObject>> { 
         return httpClient.get(this.END_POINT+'/me')
             .then(function (response) {
-                console.log(response)
                 return response.data
             })
             .catch((error) => {

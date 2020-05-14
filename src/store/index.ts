@@ -17,11 +17,13 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    /* used fo toggling Loader component, often while waiting for http responses from server*/
     toggleLoader: ({commit}, boolean) => {
       commit('setLoader', boolean)
     }
   },
   plugins: [
+    /* Keeps state in account and order store modules on page reloads */
     createPersistedState({
       paths: ['account', 'order'],
     }),

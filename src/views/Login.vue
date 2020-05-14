@@ -5,7 +5,7 @@
     <template v-slot:activator="{ on }">
         <v-container>
             <!--<v-img class="mx-auto"
-            src= "client/public/JS-logo.jpg"
+            src= "public/JS_small_logo.png"
             width="200px"
             ></v-img>-->
             <v-card width="400" class="mx-auto mt-10">
@@ -149,6 +149,7 @@ export default Vue.extend({
     }),
     methods: {
         ...mapActions('account', ['login']),
+        /* sends login request to server with username and password, if successful -> sets account state with user and token */
         loginIfValid(){
             if(this.$refs.form.validate()){
                 this.$store.dispatch('toggleLoader', true)

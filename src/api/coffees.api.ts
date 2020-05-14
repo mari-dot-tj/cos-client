@@ -4,10 +4,10 @@ class CoffeeService {
 
     private END_POINT = '/coffee'
 
+    /* Gets all coffees from server, independent of customer */
     async getAllCoffees(): Promise<Array<object>> { 
         return httpClient.get(this.END_POINT)
             .then(function (response) {
-                console.log(response)
                 return response.data
             })
             .catch((error) => {
@@ -15,10 +15,10 @@ class CoffeeService {
             })
     }
 
+    /* Gets coffees connected to customer logged in (token sent with http header)*/
     async getCustomerCoffees(): Promise<Array<object>> { 
         return httpClient.get(this.END_POINT+'/me')
             .then(function (response) {
-                console.log(response)
                 return response.data
             })
             .catch((error) => {

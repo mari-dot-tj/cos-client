@@ -12,7 +12,7 @@
         :groundLevelDropdown="groundLevelDropdown"/>
         <v-snackbar 
         v-model="addedToOrderSnackBar"
-        :timeout=1000>
+        :timeout=4000>
             {{ addedToOrderSnackBarText }}
             <v-btn
                 color="primary"
@@ -56,6 +56,7 @@ export default {
         groundLevelDropdown: [],
     }),
     methods: {
+        /* gets coffee, bags and groundlevels from server and and sets local variables */
         init(){
             coffeeService.getCustomerCoffees()
             .then(coffees => {
@@ -71,6 +72,7 @@ export default {
             .then(bags => {
                     if(typeof bags != 'undefined'){
                         this.bags = bags
+                        //pushes only size in bag object to weight dropdown
                         this.bags.map(bagObj => {
                         this.weightDropdown.push(bagObj.size)
                     })
@@ -84,6 +86,7 @@ export default {
             .then(groundLevels => {
                     if(typeof groundLevels != 'undefined'){
                         this.allGroundLevels = groundLevels
+                        //pushes only level name in ground level object to ground level dropdown
                         this.allGroundLevels.map(groundLevelObj => {
                         this.groundLevelDropdown.push(groundLevelObj.level_name)
                     })
@@ -93,8 +96,10 @@ export default {
                 console.warn(error)
             })
 
+            //sets local iten id to state item id
             this.itemIdCopy = this.itemId
         },
+        /* finds grams, bag id, ground level id of selected options and adds to state order */
         addToOrder: function(coffeeId, coffeeName, weight, groundLevel, amount){
             let text = "Failed to add to order."
 
@@ -113,18 +118,21 @@ export default {
             this.$store.dispatch('order/incrementItemId')
             this.itemIdCopy = this.itemId
         },
+        /* finds grams of selected weight */
         getGramsOfWeight(weight){
             const index = this.bags.map(bagObj => {
                 return bagObj.size
             }).indexOf(weight)
             return this.bags[index].grams
         },
+        /* finds bag id of selected weight */
         findBagIdByWeight(weight){
             const index = this.bags.map(bagObj => {
                 return bagObj.size
             }).indexOf(weight)
             return this.bags[index].bag_id
         },
+        /* finds ground level id of selected ground level */
         findGroundLevelIdbyGroundLevel(groundLevel){
             const index = this.allGroundLevels.map(groundLevelObj => {
                 return groundLevelObj.level_name

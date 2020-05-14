@@ -16,7 +16,7 @@
         />
         <v-snackbar 
         v-model="removedFromOrderSnackBar"
-        :timeout=1000>
+        :timeout=4000>
             {{ removedFromOrderSnackBarText }}
             <v-btn
                 color="primary"
@@ -52,6 +52,7 @@ export default {
         removedFromOrderSnackBarText: ""
     }),
     methods: {
+        /* shows snackbar if child component (NewOrderOrderOverviewItem) emits removed-from-order */
         showRemovedFromOrderSnackBar(){
             let text = "Item removed from order."
             this.removedFromOrderSnackBarText = text

@@ -10,10 +10,10 @@ class GroundLevelService {
 
     private END_POINT = '/ground_level'
 
+    /* Gets all ground levels from server */
     async getAllGroundLevels(): Promise<Array<groundLevelObject>> { 
         return httpClient.get(this.END_POINT)
             .then(function (response) {
-                console.log(response)
                 return response.data
             })
             .catch((error) => {

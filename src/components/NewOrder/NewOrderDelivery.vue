@@ -136,6 +136,7 @@ export default {
         ...mapState('order', ['orderType'])
     },
     methods: {
+        /* gets all delivery options from server and sets local deliveryOptions if not undefined */
         init(){
             deliveryService.getAllDeliveryOptions()
             .then(deliveryOptions => {
@@ -147,17 +148,15 @@ export default {
                 console.warn(error)
             })
         },
-        setDeliveyOptions(){
-            this.allDeliveryOptions.map(deliveyOption => {
-                this.deliveyOptions.push(deliveyOption.delivery_option)
-            })
-        },
+        /* resets validation of interval field */
         resetIntervalValidation(){
             this.$refs.intervalSelect.resetValidation()
         },
+        /* resets validation of day of week field */
         resetDayOfWeekValidation(){
             this.$refs.dayOfWeekSelect.resetValidation()
         },
+        /* calcutales post price based on total weigth of order */
         findDeliveryPrice(){
             if(this.totalWeightGrams.totalWeightGrams <= 2000){
                 this.postDeliveryPrice = this.postUpTo2kgPrice
@@ -170,6 +169,7 @@ export default {
             }else this.postDeliveryPrice = "The package is too heavy for post."
             return this.postDeliveryPrice
         },
+        /* prevents more characters in additional info field if lenght is over max characters */
         onKeyDown(evt){
             if (this.info.length >= this.infoMaxChar) {
                 if (evt.keyCode == 32 || evt.keyCode >= 186 || evt.keyCode >= 48 && evt.keyCode <= 90) {
@@ -178,23 +178,28 @@ export default {
                 }
             }
         },
+        /* on paste in info field -> doenst allaw more than max characters to be pasted*/
         onPaste(evt){
             evt.preventDefault()
             this.info = evt.clipboardData.getData('text/plain').slice(0, this.infoMaxChar)
         }
     },
     watch: {
+        /* sets state delivery when changed by user */
         chosenDeliveryOption: function(newValue){
             this.$store.dispatch('order/chooseDelivery', newValue)
         },
+        /* sets state interval when changed by user */
         interval: function(newValue){
             const newInterval = this.intervalOptions.indexOf(newValue)+1
             this.$store.dispatch('order/changeInterval', newInterval)
         },
+        /* sets state day of week when changed by user */
         dayOfWeek: function(newValue){
             const newWeekDay = this.dayOfWeekOptions.indexOf(newValue)+1
             this.$store.dispatch('order/changeDayOfWeek', newWeekDay)
         },
+        /* sets state info when changed by user */
         info: function(newValue){
             this.$store.dispatch('order/changeInfo', newValue)
         }

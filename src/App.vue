@@ -24,6 +24,7 @@ export default Vue.extend({
     ...mapState('account', ['loggedIn'])
   },
   methods: {
+    /* returns true if user is logged in and route is order-overview, new-order or my-profile */
     showNavBar(){
       if(this.loggedIn){
         if(this.$route.name == 'OrderOverview' || this.$route.name == 'NewOrder' || this.$route.name == 'MyProfile')

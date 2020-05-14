@@ -14,10 +14,10 @@ interface mailPriceObject {
 
 class DeliveryService {
 
+    /* Gets all delivery options from server */
     async getAllDeliveryOptions(): Promise<Array<deliveryObject>> { 
         return httpClient.get('/delivery')
             .then(function (response) {
-                console.log(response)
                 return response.data
             })
             .catch((error) => {
@@ -25,10 +25,10 @@ class DeliveryService {
             })
     };
 
+    /* Gets all mail prices from server */
     async getAllMailPrices(): Promise<Array<mailPriceObject>> { 
         return httpClient.get('/mail_price')
             .then(function (response) {
-                console.log(response)
                 return response.data
             })
             .catch((error) => {

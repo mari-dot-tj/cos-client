@@ -14,6 +14,7 @@ class CustomerService {
 
     private END_POINT = '/customer'
 
+    /* Sendes username and password to server for login */
     async login(username: string, password: string){
         const loginInfo = {
             email: username,
@@ -22,7 +23,6 @@ class CustomerService {
         const jsonLoginInfo = JSON.stringify(loginInfo)
         return httpClient.post(this.END_POINT+'/login', jsonLoginInfo)
         .then(function (response){
-            console.log(response)
             return response
         })
         .catch((error) => {
@@ -30,11 +30,11 @@ class CustomerService {
         })
     }
 
+    /* Takes in customer object and sends to server for registering in database */
     async register(customer: Customer){
         const jsonCustomer = JSON.stringify(customer)
         return httpClient.post(this.END_POINT, jsonCustomer)
         .then(function(response){
-            console.log(response)
             return response.status
         })
         .catch((error) => {
@@ -42,10 +42,10 @@ class CustomerService {
         })
     }
 
+    /* Logs out, and current token gets deleted from database */
     async logout(){
         return httpClient.post(this.END_POINT+'/logout')
         .then(function (response){
-            console.log(response)
             return response
         })
         .catch((error) => {
@@ -53,10 +53,10 @@ class CustomerService {
         })
     }
 
+    /* Logs out of all devices - all tokens connected to the user logged in are deleted from database */
     async logoutAll(){
         return httpClient.post(this.END_POINT+'/logout-all')
         .then(function (response){
-            console.log(response)
             return response
         })
         .catch((error) => {
@@ -64,11 +64,11 @@ class CustomerService {
         })
     }
 
+    /* Takes in customer object and updates customer in database with the new one */
     async updateCustomer(customer: Customer){
         const jsonCustomer = JSON.stringify(customer)
         return httpClient.put(this.END_POINT, jsonCustomer)
         .then(function (response){
-            console.log(response)
             return response
         })
         .catch((error) => {
@@ -76,6 +76,7 @@ class CustomerService {
         })
     }
 
+    /* Takes in old and new password and updates if these are not the same, or incorrect */
     async updatePassword(oldPassword: String, newPassword: String){
         const passUpdate = {
             oldPassword: oldPassword,
@@ -84,7 +85,6 @@ class CustomerService {
         const jsonPassUpdate = JSON.stringify(passUpdate)
         return httpClient.put(this.END_POINT+'/sensitive', jsonPassUpdate)
         .then(function (response){
-            console.log(response)
             return response
         })
         .catch((error) => {

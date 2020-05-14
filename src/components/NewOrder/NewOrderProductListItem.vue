@@ -129,12 +129,7 @@ export default {
         }
     },
     methods: {
-        incrementAmount(){
-            this.amount++;
-        },
-        decrementAmount(){
-            this.amount == 0 ? this.amount = 0 : this.amount--;
-        },
+        /* resets all fields and error messeges */
         resetFields(){
             this.$refs.weightSelect.reset()
             this.$refs.groundLevelSelect.reset()
@@ -146,6 +141,7 @@ export default {
             this.weightError=''
             this.groundLevelError=''
         },
+        /* return true if amount, weight and ground level are valid. if not -> sets error messenges */
         checkIfValid(){
             if(this.amount>0 && this.weight!='' && this.groundLevel!=''){
                 return true
