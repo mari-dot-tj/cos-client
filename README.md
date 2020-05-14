@@ -22,6 +22,7 @@ VUE_APP_BASE_URL=
 ```sh
 $ npm run serve
 ```
+In the console you will be told which port your localhost client is running on.
 
 ### Compiles and minifies for production
 ```sh
