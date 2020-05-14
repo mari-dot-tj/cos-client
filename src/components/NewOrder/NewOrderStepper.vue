@@ -303,7 +303,9 @@ import Loader from '@/components/Loader'
       }
     },
     methods: {
+      /* sends request to server to post order */
       submitOrder(){
+        //checks if interval and delivery day are chosen if ordertype is recurring
         if(this.orderType == 'recurringOrder'){
           if(this.checkIfIntervalAndDayChosen()){
             this.$store.dispatch('toggleLoader', true)
@@ -341,6 +343,7 @@ import Loader from '@/components/Loader'
         }
         this.dialog = true
       },
+      /* returns true id state item list is empty */
       checkIfOrderEmpty(){
         if(this.items.length == 0){
           return true
@@ -348,14 +351,17 @@ import Loader from '@/components/Loader'
           return false
         }
       },
+      /* returns false if interval or delivery day of order state is not set */
       checkIfIntervalAndDayChosen(){
         if(this.interval == 0 || this.dayOfWeek == 0){
           return false
         }else return true
       },
+      /* cancels state order */
       cancelOrder(){
         this.$store.dispatch('order/cancelOrder')
       },
+      /* resets order type and router pushes to order overview page */
       finishOrder(){
         this.$store.dispatch('order/resetOrderType')
         this.$router.push('/order-overview')

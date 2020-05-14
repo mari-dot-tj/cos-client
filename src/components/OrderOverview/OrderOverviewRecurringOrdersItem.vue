@@ -199,6 +199,7 @@ export default {
         }
     },
     methods: {
+        /* sends request to server to cancel recurring order by id, if successful -> emits remove-order to parent component */
         cancelRecOrder(){
             this.$store.dispatch('toggleLoader', true)
             orderService.cancelRecOrderById(this.orderId)

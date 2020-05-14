@@ -66,9 +66,11 @@ export default Vue.extend({
     NavBar
   },
   methods: {
+    /* sets state order type to oneTimeOrder */
     setOneTimeOrder(){
       this.$store.dispatch('order/changeOrderType', 'oneTimeOrder')
     },
+    /* sets state order type to recurringOrder */
     setRecurringOrder(){
       this.$store.dispatch('order/changeOrderType', 'recurringOrder')    }
   },

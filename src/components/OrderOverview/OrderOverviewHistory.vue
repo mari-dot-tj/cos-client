@@ -43,6 +43,7 @@ export default {
         OrderOverviewHistoryItem
     },
     methods: {
+        /* gets coffee objects (belonging to orders) from server and places in correct order in order list*/
         init(){
             orderService.getOrders()
             .then((response) => {
@@ -102,7 +103,6 @@ export default {
                         this.orderEmpty = true
                     }
 
-                    console.log('ordreliste: ',this.orders)
                 }else{
                     this.orderEmpty = true
                 }

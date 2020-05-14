@@ -52,6 +52,7 @@ export default {
         removedFromOrderSnackBarText: ""
     }),
     methods: {
+        /* shows snackbar if child component (NewOrderOrderOverviewItem) emits removed-from-order */
         showRemovedFromOrderSnackBar(){
             let text = "Item removed from order."
             this.removedFromOrderSnackBarText = text

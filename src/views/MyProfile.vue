@@ -73,12 +73,11 @@
                     <v-row>
                         <v-col cols="6">
                             <v-text-field
-                            label="Province"
+                            label="Postal area"
                             prepend-icon="mdi-city"
-                            v-model="province"
-                            :rules="provinceRules"
-                            readonly>
-                            {{province}}
+                            v-model="postalArea"
+                            readonly
+                            disabled>
                             </v-text-field>
                         </v-col>
                     </v-row>
@@ -268,7 +267,7 @@ export default {
         newPassword: '',
         newPasswordRep: '',
         zipCode: '',
-        province: '',
+        postalArea: '',
         subscription: '',
         nameRules: [
             v => !!v || 'Organisation name is required'
@@ -285,9 +284,6 @@ export default {
         ],
         emailRules: [
             v => !!v || 'Email address is required'
-        ],
-        provinceRules: [
-            v => !!v || 'Province is required'
         ],
         zipCodeRules: [
             v => !!v || 'Zip code is required'
@@ -307,6 +303,7 @@ export default {
         updateCustomerFeedbackTitle: '',
     }),
     methods: {
+        /* sets local data to state user data */
         init(){
             this.name = this.user.name
             this.orgNumber = this.user.org_number
@@ -316,22 +313,24 @@ export default {
             this.active = this.user.active
             this.zipCode = this.user.zip_code
             this.subscription = (this.user.subscription).toString()
-            placeService.getProvinceByZip(this.zipCode)
+            //gets postal area by zip code
+            placeService.getPostalAreaByZip(this.zipCode)
             .then(response => {
-                console.log(response)
                 if(response!=undefined){
-                    this.province=response[0].province
-                }else this.province=''
+                    this.postalArea=response[0].province
+                }else this.postalArea=''
             })
             .catch(error => {
-                console.log(error)
+                console.warn(error)
             })
         },
+        /* resets password fields */
         resetPasswordField(){
             this.oldPassword = '',
             this.newPassword = '',
             this.newPasswordRep = ''
         },
+        /* sends request to server to update user information, if successful -> updates state user info */
         updateCustomerIfValid(){
             if(this.$refs.editForm.validate()){
                 this.$store.dispatch('toggleLoader', true)
@@ -351,7 +350,7 @@ export default {
                     }
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.warn(error)
                 })
             }else{
                 this.updateCustomerFeedbackMsg = "Make sure the fields are filled in correctly"
@@ -359,6 +358,7 @@ export default {
                 this.updateCustomerDialog = true
             }
         },
+        /* sends request to server to update password if the fields are valid, and the password repetitions match */
         updatePasswordIfValid(){
             if(this.$refs.passwordForm.validate()){
                 if(this.newPassword!==this.newPasswordRep){
@@ -381,7 +381,7 @@ export default {
                     }
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.warn(error)
                 })
                 }
                 this.resetPasswordField()
@@ -392,21 +392,22 @@ export default {
                 this.resetPasswordField()
             }
         },
+        /* sends request to server to log out of all devices, if sucsessful -> router pushes to login page */
         logoutAll(){
             this.$store.dispatch('toggleLoader', true)
             customerService.logoutAll()
             .then(response => {
                 this.$store.dispatch('toggleLoader', false)
-                console.log(response)
                 if(response.status==200){
                     this.$store.dispatch('account/logout')
                     this.$router.push('/login')
                 }
             })
             .catch(error => {
-                console.log(error)
+                console.warn(error)
             })
         },
+        /* checks if user information has been changed by comparing to state user info. returns true if chanegs have been made */
         checkIfChange(){
             if(this.user.customer_id != -1){
                 if(
@@ -424,19 +425,19 @@ export default {
         }
     },
     watch: {
+        /* gets postal area by zip code if zip code is changed and four digits */
         zipCode: function(newVal, oldVal){
             if(newVal.length==0){
-                this.province=''
+                this.postalArea=''
             }else if(newVal.length>=4){
-                placeService.getProvinceByZip(newVal)
+                placeService.getPostalAreaByZip(newVal)
                 .then(response => {
-                    console.log(response)
                     if(response!=undefined){
-                        this.province=response[0].province
-                    }else this.province=''
+                        this.postalArea=response[0].province
+                    }else this.postalArea=''
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.warn(error)
                 })
             }
         }
@@ -451,6 +452,7 @@ export default {
             this.$router.push('/login');
         }
     },
+    /* checks if chanegs has been made before leaving page, asks user to confirm if changes have been made */
     beforeRouteLeave(to, from, next) {
         // if(to.fullPath=='/login'){
         //     next()

@@ -56,12 +56,10 @@ export default Vue.extend({
         {text: 'My profile', link: '/my-profile'}
       ]
     }),
-    computed: {
-      ...mapGetters('account', ['isLoggedIn'])
-    },
     methods: {
       ...mapActions('account', ['logout']),
       logout(){
+        /* if logout response from server is 200, call state logout action to reset state, and push login page with router */
         this.$store.dispatch('toggleLoader', true)
         customerService.logout()
           .then(response => {

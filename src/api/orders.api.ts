@@ -1,32 +1,13 @@
 import httpClient from './httpClient'
 
-
-/*interface Order{
-  info: String,
-  delivery_date: Date,
-  production_date: Date,
-  customer_id: number,
-  status_id: number,
-  delivery_id: number,
-  ref_id: number,
-  items: [
-      {
-      coffee_id: number,
-      bag_id: number,
-      ground_level_id: number,
-      quantity: number
-      }
-    ]
-}*/
-
 class OrderService {
 
     private END_POINT = '/order'
 
+    /* Gets all orders connected to customer logged in (token sent in http header) */
     async getOrders(){
         return httpClient.get(this.END_POINT)
         .then(function (response) {
-            console.log(response)
             return response
         })
         .catch((error) => {
@@ -34,10 +15,14 @@ class OrderService {
         })
     }
 
+    /* 
+    Gets all active recurring order connected to customer logged in (token sent in http header) 
+    '/fixed-order/active/1' returns active orders
+    '/fixed-order/active/0' returns inactive orders
+    */
     async getActiveRecurringOrders(){
         return httpClient.get(this.END_POINT+'/fixed-order/active/1')
         .then(function (response) {
-            console.log(response)
             return response
         })
         .catch((error) => {
@@ -45,6 +30,7 @@ class OrderService {
         })
     }
 
+    /* Takes in orderId and sets active attribute of the order to 0 (not active) */
     async cancelRecOrderById(orderId: number){
         const obj = {
             active: 0,
@@ -53,7 +39,6 @@ class OrderService {
         const jsonObj = JSON.stringify(obj)
         return httpClient.put(this.END_POINT, jsonObj)
         .then(function (response) {
-            console.log(response)
             return response
         })
         .catch((error) => {
@@ -61,6 +46,9 @@ class OrderService {
         })
     }
     
+    /*
+    Posts recurring order if interval and delivery day (day_of_week) are chosen, if not: posts one-time order
+    */
     async postOrder(items: [], delivery_id: number, order_interval: number|undefined, day_of_week: number|undefined, info: String){
         let obj
         if(order_interval!=undefined && day_of_week!=undefined){
@@ -91,7 +79,6 @@ class OrderService {
         const jsonObj = JSON.stringify(obj)
         return httpClient.post(this.END_POINT, jsonObj)
         .then(function (response) {
-            console.log("Post order request status: ",response.status)
             return response
         })
         .catch((error) => {

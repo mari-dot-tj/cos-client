@@ -4,10 +4,10 @@ class PlaceService {
 
     private END_POINT = '/place'
 
-    async getProvinceByZip(zip: number): Promise<object>{
+    /* Gets name of postal area from server belonging to zip code sendt in */
+    async getPostalAreaByZip(zip: number): Promise<object>{
         return httpClient.get(this.END_POINT+'/'+zip)
         .then(function (response) {
-            console.log(response)
             return response.data
         })
         .catch((error) => {

@@ -55,6 +55,7 @@ const module: Module<OrderState, {}> = {
     setInfo: (state, info) => {
       state.info = info
     },
+    /* adds item object to state item list */
     pushProductToOrder: (state, {item_id, coffee_id, coffee_name, weight, grams, bag_id, ground_level, ground_level_id, amount}) => {
       state.items.push({
           item_id,
@@ -68,21 +69,22 @@ const module: Module<OrderState, {}> = {
           amount
       })
     },
+    /* deletes item with received id from state item list */
     deleteItemFromOrder: (state, item_id) => {
       const index = state.items.map (x => {
         return x.item_id;
       }).indexOf(item_id);
       state.items.splice(index, 1);
     },
+    /* deletes all items in state item list */
     deleteAllItemsFromOrder:(state) => {
       state.items.splice(0, state.items.length)
     },
+    /* sets amount of item of received id to new amount */
     replaceItemAmount: (state, {item_id, newAmount}) => {
       const item = state.items.find(x => x.item_id == item_id);
       if(item!==undefined){
         item.amount=newAmount;
-      }else{
-        console.log("Item not found");
       }
     },
     resetItemId: (state) => {
@@ -105,10 +107,10 @@ const module: Module<OrderState, {}> = {
     }
   },
   actions: {
-    addProductToOrder: ({state, commit}, {item_id, coffee_id, coffee_name, weight, grams, bag_id, ground_level, ground_level_id, amount}) => {
+    /* add product to order if all attributes are defined */
+    addProductToOrder: ({commit}, {item_id, coffee_id, coffee_name, weight, grams, bag_id, ground_level, ground_level_id, amount}) => {
       if(coffee_id!==undefined || coffee_name!== undefined || weight!== undefined || grams!== undefined || ground_level!==undefined || amount!==undefined){
         commit('pushProductToOrder', {item_id, coffee_id, coffee_name, weight, bag_id, grams, ground_level, ground_level_id, amount})
-        console.log(state.items)
         return true
       }else return false
     },
@@ -139,12 +141,15 @@ const module: Module<OrderState, {}> = {
     chooseDelivery: ({commit}, delivery_id) => {
       commit('setDeliveryId', delivery_id)
     },
-    postOrder: ({state, commit, dispatch}) => {
+    /* sends http request to server to post order */
+    postOrder: ({state, dispatch}) => {
+      // inserts all items into new array orderItems with a subarray for every item instance
       const orderItems = [] as any
       state.items.map(item => {
         orderItems.push([item.coffee_id, item.bag_id, item.ground_level_id, item.amount])
       })
       return new Promise((resolve, reject) => {
+        // if it is a recurring order, send interval and day of week
         if(state.orderType=='recurringOrder'){
           orderService.postOrder(orderItems, state.delivery_id, state.interval, state.dayOfWeek, state.info).then(response => {
             if(typeof response != 'undefined'){
@@ -156,6 +161,7 @@ const module: Module<OrderState, {}> = {
           }, error => {
             reject(error)
           })
+          //else its a one-time order and sends interval and day of week as undefined
         }else{
           orderService.postOrder(orderItems, state.delivery_id, undefined, undefined, state.info).then(response => {
             if(typeof response != 'undefined'){
@@ -170,10 +176,12 @@ const module: Module<OrderState, {}> = {
         }
       })
     },
+    /* resets all order state attributes, including order type */
     cancelOrder: ({commit, dispatch}) => {
       dispatch('resetOrderInfo')
       commit('resetOrderType')
     },
+    /* resets all order state attributes, excluding order type */
     resetOrderInfo: ({commit}) => {
       commit('deleteAllItemsFromOrder')
       commit('resetItemId')
@@ -183,6 +191,7 @@ const module: Module<OrderState, {}> = {
     }
   },
   getters: {
+    /* calculates total weight of order, used to calcutale post price */
     totalWeightGrams: (state) => {
       let totalWeightGrams = 0
       state.items.map(item => {

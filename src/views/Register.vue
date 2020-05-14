@@ -77,15 +77,14 @@
                         </v-col>
                     </v-row>
                     <v-row>
-                        <v-col cols="6">
+                        <v-col cols="6" v-if="postalArea!=''">
                             <v-text-field
-                            label="Province"
-                            prepend-icon="mdi-city"
-                            v-model="province"
-                            :rules="provinceRules"
+                            v-model="postalArea"
+                            label="Postal area"
                             readonly
-                            >
-                            </v-text-field>
+                            disabled
+                            prepend-icon="mdi-city"
+                            ></v-text-field>
                         </v-col>
                     </v-row>
                     <v-row>
@@ -193,7 +192,7 @@
     padding: 8%;
     color: #59c8a5;
 }
-.province{
+.postalArea{
     color: black;
     padding-bottom: 0;
     margin-bottom: 0;
@@ -215,7 +214,7 @@ export default {
         orgNumber: '',
         email: '',
         zipCode: '',
-        province: '',
+        postalArea: '',
         subscription: '1',
         nameRules: [
             v => !!v || 'Organisation name is required'
@@ -234,9 +233,6 @@ export default {
             v => !!v || 'Email address is required',
             v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
         ],
-        provinceRules: [
-            v => !!v || 'Province is required'
-        ],
         zipCodeRules: [
             v => !!v || 'Zip code is required'
         ],
@@ -246,7 +242,7 @@ export default {
         dialog: false,
     }),
     methods: {
-        ...mapActions('account', ['getProvinceByZip', 'register']),
+        /* sends request to server to register, gives success feedback to user if response status is 200 or 201 */
         registerIfValid(){
             if(this.$refs.form.validate()){
                 customerService.register({name: this.name, address: this.address , phone: this.phone, org_number: this.orgNumber, email: this.email, zip_code: this.zipCode, subscription: this.subscription})
@@ -260,7 +256,7 @@ export default {
                     }
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.warn(error)
                 })
             }else{
                 this.notValidFormDialog=true
@@ -268,19 +264,19 @@ export default {
         }
     },
     watch: {
+        /* gets postal area by zip code if zip code is changed and four digits */
         zipCode: function(newVal, oldVal){
             if(newVal.length==0){
-                this.province=''
+                this.postalArea=''
             }else if(newVal.length>=4){
-                placeService.getProvinceByZip(newVal)
+                placeService.getPostalAreaByZip(newVal)
                 .then(response => {
-                    console.log(response)
                     if(response!=undefined){
-                        this.province=response[0].province
-                    }else this.province=''
+                        this.postalArea=response[0].province
+                    }else this.postalArea=''
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.warn(error)
                 })
             }
         }

@@ -60,6 +60,7 @@ export default {
         OrderOverviewRecurringOrdersItem
     },
     methods:{
+        /* gets coffee objects (belonging to orders) from server and places in correct order in order list*/
         init(){
             orderService.getActiveRecurringOrders()
             .then((response) => {
@@ -120,8 +121,6 @@ export default {
                     if(this.recurringOrders.length==0){
                         this.recurringOrdersEmpty = true
                     }
-
-                    console.log('faste ordre: ',this.recurringOrders)
                 }else{
                     this.recurringOrdersEmpty = true
                 }
@@ -130,6 +129,7 @@ export default {
                 console.warn(error)
             })
         },
+        /* returns day (string) of number 1-5 */
         findDayOfWeek(number){
             if(number==1){
                 return 'Monday'
@@ -143,6 +143,7 @@ export default {
                 return 'Friday'
             }else return 'Invalid'
         },
+        /* returns interval (string) of number 1-4*/
         findInterval(number){
             if(number==1){
                 return 'Every week'
@@ -154,6 +155,7 @@ export default {
                 return 'Every month'
             }else return 'Invalid'
         },
+        /* removes order with received order id from recurring order list is´f child component emits remove-order */
         removeOrder(orderId){
             this.recurringOrders.splice(this.recurringOrders.find(({orderId}) => orderId == orderId),1)
             if(this.recurringOrders.length==0){
